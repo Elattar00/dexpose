@@ -1,0 +1,806 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>DeXpose | Product Knowledge</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                    },
+                    animation: {
+                        'fade-in': 'fadeIn 0.4s ease-out',
+                        'slide-up': 'slideUp 0.5s cubic-bezier(0.16, 1, 0.3, 1)',
+                    },
+                    keyframes: {
+                        fadeIn: {
+                            '0%': { opacity: '0' },
+                            '100%': { opacity: '1' },
+                        },
+                        slideUp: {
+                            '0%': { transform: 'translateY(20px)', opacity: '0' },
+                            '100%': { transform: 'translateY(0)', opacity: '1' },
+                        }
+                    },
+                    boxShadow: {
+                        'glow': '0 0 20px rgba(79, 70, 229, 0.15)',
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <!-- Babel for JSX compilation -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+    <!-- Import Map -->
+    <script type="importmap">
+    {
+        "imports": {
+            "react": "https://esm.sh/react@18.2.0",
+            "react-dom/client": "https://esm.sh/react-dom@18.2.0/client",
+            "lucide-react": "https://esm.sh/lucide-react@0.263.1"
+        }
+    }
+    </script>
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap');
+
+        /* Custom scrollbar styling */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+        
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+        body { font-family: 'Inter', sans-serif; }
+        
+        .glass-header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(226, 232, 240, 1);
+        }
+
+        /* Dot Pattern Background */
+        .bg-dots {
+            background-color: #f8fafc;
+            background-image: radial-gradient(#cbd5e1 1.5px, transparent 1.5px);
+            background-size: 24px 24px;
+        }
+        
+        /* Card Hover Effects */
+        .hover-card {
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+        .hover-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body class="bg-dots text-gray-900 min-h-screen">
+    <div id="root"></div>
+
+    <script type="text/babel" data-type="module">
+        import { createRoot } from 'react-dom/client';
+        import React, { useState, useEffect } from 'react';
+        import { 
+            Shield, Ghost, Globe, Code, Siren, Briefcase, Swords, 
+            Target, Eye, Lock, Server, Smartphone, Search, AlertTriangle, 
+            CheckCircle, Zap, TrendingUp, UserCheck, Database, FileText,
+            LayoutDashboard, EyeOff, Radio, Crosshair, Fingerprint,
+            ShieldCheck, Share2, Layers, AlertOctagon, Monitor,
+            Clock, MessageSquare, Users, ArrowRight, Activity, Radar
+        } from 'lucide-react';
+
+        // --- UI Components ---
+
+        const SectionHeader = ({ title, subtitle, icon: Icon, colorClass }) => (
+            <div className="mb-10 relative">
+                <div className="flex items-center gap-4 mb-3 relative z-10">
+                    <div className={`p-3 rounded-xl ${colorClass} shadow-lg ring-1 ring-black/5`}>
+                        <Icon size={28} className="text-current" />
+                    </div>
+                    <div>
+                        <h2 className="text-3xl md:text-4xl font-extrabold tracking-tight text-gray-900">{title}</h2>
+                        {subtitle && <p className="text-lg text-gray-500 font-medium">{subtitle}</p>}
+                    </div>
+                </div>
+            </div>
+        );
+
+        const ContentCard = ({ children, className = "" }) => (
+            <div className={`bg-white rounded-2xl border border-gray-200 shadow-xl shadow-gray-200/50 p-8 ${className}`}>
+                {children}
+            </div>
+        );
+
+        const InfoCard = ({ title, text, icon: Icon, accentColor = "blue" }) => {
+            const theme = {
+                blue: "text-blue-600 bg-blue-50 border-blue-100",
+                green: "text-emerald-600 bg-emerald-50 border-emerald-100",
+                red: "text-red-600 bg-red-50 border-red-100",
+                amber: "text-amber-600 bg-amber-50 border-amber-100",
+                purple: "text-purple-600 bg-purple-50 border-purple-100",
+                gray: "text-gray-700 bg-gray-100 border-gray-200",
+                neutral: "text-gray-800 bg-gray-50 border-gray-200"
+            };
+            const activeTheme = theme[accentColor] || theme.blue;
+            // Splitting to separate icon container styles from card styles
+            const iconBg = activeTheme.replace('border', 'ring-0');
+
+            return (
+                <div className={`flex flex-col h-full bg-white border rounded-xl p-6 hover-card ${activeTheme.split(' ').slice(2).join(' ')}`}>
+                    <div className="flex items-center gap-3 mb-4">
+                        {Icon && <div className={`p-2.5 rounded-lg ${activeTheme.split(' ').slice(0, 2).join(' ')}`}><Icon size={20} /></div>}
+                        <h4 className="font-bold text-gray-900 text-base leading-tight">{title}</h4>
+                    </div>
+                    <p className="text-sm text-gray-600 leading-relaxed mt-auto font-medium">{text}</p>
+                </div>
+            );
+        };
+
+        const FeatureList = ({ title, items, color = "blue" }) => {
+            const colors = {
+                blue: "text-blue-600 bg-blue-600",
+                green: "text-emerald-600 bg-emerald-600",
+                red: "text-red-600 bg-red-600",
+                amber: "text-amber-600 bg-amber-600",
+                gray: "text-gray-900 bg-gray-900",
+                neutral: "text-gray-800 bg-gray-800"
+            };
+            const accent = colors[color] || colors.blue;
+            const iconColor = accent.split(' ')[0];
+            const dotColor = accent.split(' ')[1];
+
+            return (
+                <div className="bg-white rounded-2xl border border-gray-200 p-8 h-full shadow-lg shadow-gray-200/40">
+                    {title && <h4 className={`font-bold uppercase tracking-wider text-xs mb-6 flex items-center gap-2 ${iconColor}`}>
+                        <CheckCircle size={16} /> {title}
+                    </h4>}
+                    <ul className="space-y-5">
+                        {items.map((item, i) => (
+                            <li key={i} className="flex gap-4 group">
+                                <div className={`flex-shrink-0 w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-bold text-white ${dotColor} mt-0.5 shadow-sm`}>{i + 1}</div>
+                                <div>
+                                    <strong className="block text-gray-900 text-sm font-bold mb-1">{item.title}</strong>
+                                    <p className="text-sm text-gray-600 leading-relaxed">{item.desc}</p>
+                                </div>
+                            </li>
+                        ))}
+                    </ul>
+                </div>
+            );
+        };
+
+        // Updated Component to accept dynamic titles
+        const ProblemSolution = ({ problem, solution, problemTitle="The Problem", solutionTitle="The Solution" }) => (
+            <div className="grid md:grid-cols-2 gap-8 my-10">
+                <ContentCard className="border-l-[6px] border-l-red-500 bg-gradient-to-b from-red-50/50 to-transparent">
+                    <h3 className="font-bold text-gray-900 flex items-center gap-3 mb-6 text-xl">
+                        <div className="p-2 bg-white rounded-lg shadow-sm text-red-500 border border-red-100"><AlertTriangle size={20}/></div>
+                        {problemTitle}
+                    </h3>
+                    <div className="space-y-5">
+                        {problem.map((p, i) => (
+                            <div key={i} className="relative pl-4 border-l-2 border-red-200">
+                                <strong className="block text-red-700 text-xs uppercase tracking-wide mb-1 font-bold">{p.title}</strong>
+                                <p className="text-sm text-gray-700 font-medium">{p.desc}</p>
+                            </div>
+                        ))}
+                    </div>
+                </ContentCard>
+                
+                <ContentCard className="border-l-[6px] border-l-emerald-500 bg-gradient-to-b from-emerald-50/50 to-transparent">
+                    <h3 className="font-bold text-gray-900 flex items-center gap-3 mb-6 text-xl">
+                        <div className="p-2 bg-white rounded-lg shadow-sm text-emerald-500 border border-emerald-100"><Zap size={20}/></div>
+                        {solutionTitle}
+                    </h3>
+                    <div className="space-y-5">
+                        {solution.map((s, i) => (
+                            <div key={i} className="relative pl-4 border-l-2 border-emerald-200">
+                                <strong className="block text-emerald-700 text-xs uppercase tracking-wide mb-1 font-bold">{s.title}</strong>
+                                <p className="text-sm text-gray-700 font-medium">{s.desc}</p>
+                            </div>
+                        ))}
+                    </div>
+                </ContentCard>
+            </div>
+        );
+
+        const CompetitorCard = ({ competitor, strength, whyDeXpose }) => (
+            <div className="group border border-gray-200 rounded-xl p-6 hover:border-gray-300 transition-all bg-white shadow-sm hover:shadow-md">
+                <div className="flex justify-between items-center mb-4">
+                    <h4 className="font-black text-gray-900 uppercase tracking-tight text-lg">{competitor}</h4>
+                    <Swords size={18} className="text-gray-300 group-hover:text-red-500 transition-colors" />
+                </div>
+                <div className="grid md:grid-cols-2 gap-6 text-sm">
+                    <div className="bg-gray-50 p-4 rounded-lg">
+                        <span className="text-[10px] font-bold text-gray-500 uppercase block mb-2 tracking-wider">Their Strength</span>
+                        <p className="text-gray-700 font-medium">{strength}</p>
+                    </div>
+                    <div className="bg-blue-50 p-4 rounded-lg">
+                        <span className="text-[10px] font-bold text-blue-600 uppercase block mb-2 tracking-wider">Why DeXpose</span>
+                        <p className="text-gray-900 font-semibold">{whyDeXpose}</p>
+                    </div>
+                </div>
+            </div>
+        );
+
+        // --- Main Application ---
+
+        const App = () => {
+            const [activeTab, setActiveTab] = useState('darkweb');
+
+            const navItems = [
+                { id: 'darkweb', label: 'Dark Web', icon: Radar },
+                { id: 'asm', label: 'Attack Surface', icon: Globe },
+                { id: 'brand', label: 'Brand', icon: ShieldCheck },
+                { id: 'api', label: 'API', icon: Code },
+                { id: 'investigation', label: 'Cybercrime', icon: Siren },
+                { id: 'msp', label: 'For MSPs', icon: Briefcase },
+                { id: 'competitors', label: 'Battle Card', icon: Swords },
+            ];
+
+            return (
+                <div className="min-h-screen font-sans selection:bg-gray-200 pb-24">
+                    
+                    {/* Header */}
+                    <header className="sticky top-0 z-50 glass-header">
+                        <div className="max-w-7xl mx-auto px-4 md:px-6">
+                            <div className="flex justify-between items-center py-4">
+                                <div className="flex items-center gap-3">
+                                    <div className="bg-gray-900 text-white w-10 h-10 rounded-xl flex items-center justify-center shadow-lg transform transition-transform hover:scale-105">
+                                        <Shield size={20} strokeWidth={2.5} />
+                                    </div>
+                                    <div>
+                                        <h1 className="text-xl font-black text-gray-900 leading-none tracking-tight mb-0.5">DeXpose</h1>
+                                        <p className="text-[10px] font-bold text-gray-500 uppercase tracking-widest">Knowledge Base</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* Tabs */}
+                            <div className="flex overflow-x-auto gap-2 pb-2 -mx-4 px-4 md:mx-0 md:px-0 no-scrollbar pt-2">
+                                {navItems.map((tab) => (
+                                    <button
+                                        key={tab.id}
+                                        onClick={() => setActiveTab(tab.id)}
+                                        className={`px-4 py-2.5 rounded-lg text-xs font-bold uppercase tracking-wide transition-all duration-200 whitespace-nowrap flex items-center gap-2 border ${
+                                            activeTab === tab.id 
+                                            ? 'bg-gray-900 text-white border-gray-900 shadow-md transform scale-[1.02]' 
+                                            : 'bg-white text-gray-600 border-gray-200 hover:border-gray-300 hover:bg-gray-50'
+                                        }`}
+                                    >
+                                        <tab.icon size={14} />
+                                        {tab.label}
+                                    </button>
+                                ))}
+                            </div>
+                        </div>
+                    </header>
+
+                    <main className="max-w-6xl mx-auto px-4 md:px-6 py-12 animate-fade-in">
+
+                        {/* DARK WEB MONITORING */}
+                        {activeTab === 'darkweb' && (
+                            <div className="animate-slide-up">
+                                <SectionHeader 
+                                    title="Dark Web Monitoring" 
+                                    subtitle="DeXpose Dark Web Monitoring is a 'radar' for the hidden parts of the internet, designed to find stolen data before hackers can use it. It is available as a general security tool and a specialized version for Managed Service Providers (MSPs)." 
+                                    icon={Radar}
+                                    colorClass="bg-gray-900 text-white"
+                                />
+                                
+                                <ProblemSolution 
+                                    problemTitle='The Problem: "Invisible Threats"'
+                                    solutionTitle='How It Works'
+                                    problem={[
+                                        { title: "The Underground Economy", desc: "Hackers buy and sell stolen passwords, company data, and ransomware kits on the dark web and encrypted apps like Telegram." },
+                                        { title: "Hidden Breaches", desc: "Most companies don't know their data has been stolen until a major attack happens." },
+                                        { title: "Standard Tools Miss This", desc: "Regular security software often cannot see into the private forums where criminals trade information." }
+                                    ]}
+                                    solution={[
+                                        { title: "Massive Data Collection", desc: "It crawls over 15,000 sources, including the dark web, black markets, and private messaging apps (Discord and Telegram)." },
+                                        { title: "AI & Human Analysis", desc: "An AI engine scans millions of records to find mentions of your company, while human experts verify the results to remove false alarms." },
+                                        { title: "Real-Time Alerts", desc: "If your data is found, you get an instant notification via email or your security portal so you can act immediately." }
+                                    ]}
+                                />
+
+                                <h3 className="text-xl font-bold text-gray-900 mt-12 mb-8 flex items-center gap-3">
+                                    <div className="p-2 bg-emerald-100 rounded-lg text-emerald-600"><Activity size={20}/></div>
+                                    Key "Radar" Features
+                                </h3>
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-16">
+                                    <InfoCard title="Credential & Identity Monitoring" text="Detects leaked employee and customer usernames, passwords, and personal information." icon={UserCheck} accentColor="blue" />
+                                    <InfoCard title="VIP & Executive Protection" text='Specifically watches for threats or "doxxing" attempts against company leaders.' icon={CheckCircle} accentColor="blue" />
+                                    <InfoCard title="Device Compromise View" text='Shows if an employee&#39;s computer has been infected with "infostealer" malware that captures their files and cookies.' icon={Smartphone} accentColor="blue" />
+                                    <InfoCard title="Ransomware Intelligence" text="Tracks ransomware groups to see if they are planning to target your organization." icon={Lock} accentColor="blue" />
+                                </div>
+
+                                <div className="bg-white rounded-2xl p-8 border border-gray-200 shadow-xl relative overflow-hidden group">
+                                    <div className="absolute top-0 right-0 p-8 opacity-5 group-hover:opacity-10 transition-opacity"><Briefcase size={140}/></div>
+                                    <div className="flex items-center gap-3 mb-6 relative z-10">
+                                        <div className="p-2.5 bg-black rounded-xl text-white shadow-lg"><Briefcase size={22}/></div>
+                                        <h3 className="font-bold text-gray-900 text-2xl">Special Benefits for MSPs</h3>
+                                    </div>
+                                    <p className="text-gray-600 mb-8 text-lg relative z-10">If you are an MSP, this tool helps you protect clients and grow your business:</p>
+                                    <div className="grid md:grid-cols-3 gap-6 relative z-10">
+                                        <InfoCard title="Lead Generation" text='Use the "MISPAR" tool to find companies that have recently been breached and offer them your services.' icon={Target} accentColor="neutral" />
+                                        <InfoCard title="Branded Reports" text="Generate professional, white-labeled security reports with one click to show clients exactly where they are at risk." icon={FileText} accentColor="neutral" />
+                                        <InfoCard title="Multi-Tenant Portal" text="Manage all your different clients from a single secure dashboard." icon={LayoutDashboard} accentColor="neutral" />
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+
+                        {/* ATTACK SURFACE MAPPING */}
+                        {activeTab === 'asm' && (
+                            <div className="animate-slide-up">
+                                <SectionHeader 
+                                    title="Attack Surface Mapping" 
+                                    subtitle="Find Your Digital Blind Spots" 
+                                    icon={Globe}
+                                    colorClass="bg-blue-600 text-blue-50"
+                                />
+                                
+                                <p className="text-xl text-gray-600 mb-12 leading-relaxed max-w-4xl font-light">
+                                    DeXpose Attack Surface Mapping (ASM) is a security tool designed to find and protect every part of a company’s online presence.
+                                </p>
+
+                                <div className="grid lg:grid-cols-2 gap-8 my-10">
+                                    <ContentCard className="h-full border-t-4 border-t-amber-500">
+                                        <h3 className="font-bold text-gray-900 mb-8 flex items-center gap-3 text-xl">
+                                            <div className="bg-amber-100 p-2.5 rounded-xl text-amber-600"><AlertTriangle size={24}/></div> 
+                                            The Problem: "Digital Blind Spots"
+                                        </h3>
+                                        <p className="text-gray-600 mb-8 font-medium">As companies grow, they often forget about old websites, hidden cloud folders, or unpatched servers.</p>
+                                        <ul className="space-y-6">
+                                            <li className="bg-amber-50 p-5 rounded-xl border border-amber-100">
+                                                <strong className="block text-amber-700 text-xs uppercase mb-2 font-bold tracking-wide">Expansion</strong> 
+                                                <span className="text-gray-700 text-sm">Moving to the cloud or remote work creates a massive digital footprint that is hard to track.</span>
+                                            </li>
+                                            <li className="bg-amber-50 p-5 rounded-xl border border-amber-100">
+                                                <strong className="block text-amber-700 text-xs uppercase mb-2 font-bold tracking-wide">Risks</strong> 
+                                                <span className="text-gray-700 text-sm">Hackers look for these forgotten "blind spots"—like exposed databases or outdated software—to break in.</span>
+                                            </li>
+                                            <li className="bg-amber-50 p-5 rounded-xl border border-amber-100">
+                                                <strong className="block text-amber-700 text-xs uppercase mb-2 font-bold tracking-wide">Noise</strong> 
+                                                <span className="text-gray-700 text-sm">Many security tools create too many false alarms, making it hard for teams to know what is actually dangerous.</span>
+                                            </li>
+                                        </ul>
+                                    </ContentCard>
+                                    
+                                    <div className="flex flex-col gap-8 h-full">
+                                        <ContentCard className="bg-blue-50/50 border-blue-200 flex-1">
+                                            <h3 className="font-bold text-gray-900 mb-6 flex items-center gap-3 text-xl">
+                                                <div className="bg-white p-2.5 rounded-xl text-blue-600 shadow-sm"><Zap size={24}/></div>
+                                                The Solution: "The Hybrid Approach"
+                                            </h3>
+                                            <p className="text-gray-600 mb-6 font-medium">DeXpose solves this by combining the speed of technology with the accuracy of people.</p>
+                                            <ul className="space-y-4">
+                                                <li className="flex gap-4 p-4 bg-white rounded-xl border border-blue-100 shadow-sm">
+                                                    <span className="font-bold text-blue-700 w-32 shrink-0 text-sm">AI Engine</span> 
+                                                    <span className="text-gray-600 text-sm">A high-speed system that scans the entire internet to find your domains, IPs, and cloud assets.</span>
+                                                </li>
+                                                <li className="flex gap-4 p-4 bg-white rounded-xl border border-blue-100 shadow-sm">
+                                                    <span className="font-bold text-blue-700 w-32 shrink-0 text-sm">Human Experts</span> 
+                                                    <span className="text-gray-600 text-sm">Real security analysts check the AI’s findings to remove false alarms and explain exactly how a risk might hurt your business.</span>
+                                                </li>
+                                                <li className="flex gap-4 p-4 bg-white rounded-xl border border-blue-100 shadow-sm">
+                                                    <span className="font-bold text-blue-700 w-32 shrink-0 text-sm">Continuous Learning</span> 
+                                                    <span className="text-gray-600 text-sm">The system gets smarter every time it scans, adapting to new types of attacks.</span>
+                                                </li>
+                                            </ul>
+                                        </ContentCard>
+                                        <div className="flex-1">
+                                            <FeatureList 
+                                                title="Main Benefits"
+                                                color="green"
+                                                items={[
+                                                    { title: "Stay Ahead", desc: "Fix your weaknesses before a hacker can use them." },
+                                                    { title: "No More Guessing", desc: 'Get a clear list of what to fix without the "noise" of false reports.' },
+                                                    { title: "Better Reports", desc: "Clearly show your progress and security health to bosses or regulators." }
+                                                ]}
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <h3 className="font-bold text-gray-900 text-xl mt-16 mb-8 flex items-center gap-3">
+                                    <div className="w-1.5 h-8 bg-blue-600 rounded-full"></div>
+                                    Key Features to Remember
+                                </h3>
+                                <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+                                    <InfoCard title="Full Visibility" text="It finds everything you own, even the stuff you forgot about." icon={Eye} accentColor="blue" />
+                                    <InfoCard title="Risk Scoring" text="It doesn't just find a problem; it tells you how serious it is and what the impact would be." icon={AlertTriangle} accentColor="blue" />
+                                    <InfoCard title="24/7 Monitoring" text='If something changes or a new "door" is left open, you get an instant alert.' icon={Clock} accentColor="blue" />
+                                    <InfoCard title="Multi-Client Ready" text="Built specifically to help service providers (MSPs) and national security teams (CERTs) manage many organizations at once." icon={Users} accentColor="blue" />
+                                </div>
+                            </div>
+                        )}
+
+                        {/* BRAND PROTECTION */}
+                        {activeTab === 'brand' && (
+                            <div className="animate-slide-up">
+                                <SectionHeader 
+                                    title="Brand Protection" 
+                                    subtitle="Defend Your Reputation" 
+                                    icon={ShieldCheck}
+                                    colorClass="bg-red-600 text-red-50"
+                                />
+                                
+                                <p className="text-xl text-gray-600 mb-12 leading-relaxed max-w-4xl font-light">
+                                    DeXpose Brand Protection is a service designed to protect a company’s reputation, digital assets, and customers from fraud and impersonation. It monitors the internet 24/7 to stop threats before they cause real damage.
+                                </p>
+
+                                <div className="bg-red-50 p-10 rounded-2xl border border-red-100 mb-12">
+                                    <h3 className="font-bold text-red-900 mb-8 flex items-center gap-3 text-xl">
+                                        <div className="bg-white p-2.5 rounded-xl text-red-600 shadow-sm border border-red-100"><Target size={24}/></div> 
+                                        Why Brand Protection is Essential
+                                    </h3>
+                                    <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+                                        {[
+                                            { t: "Stop Fraud", d: "Criminals use your brand name to launch phishing attacks or spread malware." },
+                                            { t: "Keep Trust", d: "Fake websites or rogue social media profiles can make customers lose confidence in your business." },
+                                            { t: "Save Revenue", d: "Brand abuse can drive your customers to competitors or scammers." },
+                                            { t: "Legal Safety", d: "Impersonation can lead to serious legal and regulatory issues." }
+                                        ].map((item, i) => (
+                                            <div key={i} className="bg-white p-6 rounded-xl shadow-sm border border-red-100 hover:border-red-300 transition-colors">
+                                                <div className="text-red-600 font-bold mb-3 text-lg">{item.t}</div>
+                                                <div className="text-sm text-gray-600 leading-relaxed font-medium">{item.d}</div>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+
+                                <div className="grid md:grid-cols-2 gap-8 mb-12">
+                                    <FeatureList 
+                                        title='What We Monitor (The "Lookout" Areas)'
+                                        color="red"
+                                        items={[
+                                            { title: "Phishing Sites", desc: "Identifying fake domains that look like yours using AI similarity models." },
+                                            { title: "Social Media", desc: "Spotting fake profiles, fraudulent ads, and people impersonating your executives (VIPs)." },
+                                            { title: "Mobile Apps", desc: 'Finding "trojan" or fake apps in the Google Play Store, Apple App Store, and third-party sites.' },
+                                            { title: "Dark Web", desc: "Searching criminal forums for stolen customer data or counterfeit products." }
+                                        ]}
+                                    />
+                                    <div>
+                                        <p className="mb-6 text-gray-600 font-medium">DeXpose scans multiple channels to find anyone pretending to be you:</p>
+                                        <FeatureList 
+                                            title='The "Takedown" Advantage'
+                                            color="blue"
+                                            items={[
+                                                { title: "Forensic Evidence", desc: "We collect all the proof needed to show a site or app is fake." },
+                                                { title: "Ready-to-Submit Packages", desc: "We generate the paperwork you need to send to hosting providers and app stores." },
+                                                { title: "Expert Collaboration", desc: "We work directly with registrars and legal teams to get the content removed fast." }
+                                            ]}
+                                        />
+                                         <p className="mt-4 text-gray-600 font-medium text-sm text-right">Finding the threat is only half the battle. DeXpose helps you remove it.</p>
+                                    </div>
+                                </div>
+                                <FeatureList 
+                                    title="Why DeXpose Stands Out"
+                                    color="green"
+                                    items={[
+                                        { title: "AI + Human Speed", desc: "AI finds threats in hours instead of weeks, while human experts check the results to ensure they are accurate." },
+                                        { title: "Integrated Defense", desc: "Unlike other tools, this is part of a larger security ecosystem that includes dark web intelligence." },
+                                        { title: "End-to-End Service", desc: "We handle everything from discovery and alerting to the final takedown." }
+                                    ]}
+                                />
+                            </div>
+                        )}
+
+                        {/* API INTEGRATIONS */}
+                        {activeTab === 'api' && (
+                            <div className="animate-slide-up">
+                                <SectionHeader 
+                                    title="API Integrations" 
+                                    subtitle="One Tool, All The Data" 
+                                    icon={Code}
+                                    colorClass="bg-green-600 text-green-50"
+                                />
+                                
+                                <p className="text-xl text-gray-600 mb-12 leading-relaxed max-w-4xl font-light">
+                                    The DeXpose API is a tool that allows businesses to plug DeXpose’s massive database of stolen data and dark web threats directly into their own software or security dashboards.
+                                </p>
+
+                                <ProblemSolution 
+                                    problemTitle='The Problem: "Data is Hard to Find and Manage"'
+                                    solutionTitle='The Solution: "One Tool, All the Data"'
+                                    problem={[
+                                        { title: "Too Many Sources", desc: "Information about stolen data is scattered across billions of records on the dark web, Telegram, and hacker forums." },
+                                        { title: "Manual Work", desc: "Most security tools don't have an API, so teams have to check dashboards manually, which is slow and hard to scale." },
+                                        { title: "Late Warnings", desc: "By the time a company manually finds a leak, the damage is often already done." }
+                                    ]}
+                                    solution={[
+                                        { title: "Unified Feed", desc: "Instead of checking different places, the API provides one single connection for breach data, dark web mentions, and malware logs." },
+                                        { title: "Real-Time Speed", desc: "Fresh intelligence is gathered and delivered daily so you can act fast." },
+                                        { title: "Easy Integration", desc: "It uses a standard technical format (RESTful API with JSON) that makes it simple for your developers to plug it into your existing tools." }
+                                    ]}
+                                />
+
+                                <h3 className="font-bold text-gray-900 text-xl mb-8 mt-16 flex items-center gap-3">
+                                    <div className="w-1.5 h-8 bg-green-600 rounded-full"></div>
+                                    Key Capabilities
+                                </h3>
+                                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16">
+                                    <InfoCard title="Search Anything" text="You can instantly lookup information using an email, website domain, phone number, username, or even specific keywords." icon={Search} accentColor="green" />
+                                    <InfoCard title="Malware Detection" text="Access logs from active malware families to see if any of your devices or accounts have been infected." icon={AlertOctagon} accentColor="green" />
+                                    <InfoCard title="Bulk Lookups" text="If you are a large company, you can scan thousands of records at once to monitor everyone in your organization." icon={Layers} accentColor="green" />
+                                </div>
+                                
+                                <h3 className="font-bold text-gray-900 text-xl mb-8 flex items-center gap-3">
+                                    <div className="w-1.5 h-8 bg-gray-600 rounded-full"></div>
+                                    Who It’s For
+                                </h3>
+                                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                                    <InfoCard title="MSPs" text='You can add "Dark Web Intelligence" as a premium service for your clients without needing to build your own database.' icon={Briefcase} accentColor="neutral" />
+                                    <InfoCard title="Enterprises" text="Use the API to protect your employees and executives from identity theft and fraud." icon={Briefcase} accentColor="neutral" />
+                                    <InfoCard title="Security Companies" text="Enrich your own security platforms with DeXpose’s unique data to save years of collection costs." icon={Shield} accentColor="neutral" />
+                                </div>
+                            </div>
+                        )}
+
+                        {/* CYBERCRIME PORTAL */}
+                        {activeTab === 'investigation' && (
+                            <div className="animate-slide-up">
+                                <SectionHeader 
+                                    title="Cybercrime Investigation Portal" 
+                                    subtitle="Unmask Anonymous Criminals" 
+                                    icon={Siren}
+                                    colorClass="bg-amber-600 text-amber-50"
+                                />
+                                
+                                <p className="text-xl text-gray-600 mb-12 leading-relaxed max-w-4xl font-light">
+                                    The DeXpose Cybercrime Investigation Portal is a specialized platform that helps law enforcement, government agencies, and businesses find and identify the people behind cyberattacks. It connects different pieces of hidden data from across the internet to unmask anonymous criminals.
+                                </p>
+                                
+                                <div className="mb-12">
+                                     <FeatureList 
+                                        title="Why It is Necessary"
+                                        color="amber"
+                                        items={[
+                                            { title: "Hidden Connections", desc: "Investigators often struggle because information is spread across too many different sources, making it hard to identify suspects quickly." },
+                                            { title: "Constantly Changing Threats", desc: "Cybercriminals are always changing their methods, so investigators need flexible tools that can keep up in real-time." },
+                                            { title: "High Volume of Crime", desc: "With the massive rise in cybercrime reports, there is an urgent need for tools that can analyze large amounts of data faster than a human could alone." }
+                                        ]}
+                                    />
+                                </div>
+
+                                <div className="bg-amber-50 p-10 rounded-2xl border border-amber-100 mb-12">
+                                    <h3 className="font-bold text-amber-900 mb-8 flex items-center gap-3 text-xl">
+                                        <div className="p-2.5 bg-white rounded-xl shadow-sm text-amber-600"><EyeOff size={24}/></div>
+                                        Where the Data Comes From
+                                    </h3>
+                                    <p className="text-base text-amber-800 mb-8 font-medium">DeXpose provides a "360-degree view" by pulling information from places criminals think are private:</p>
+                                    <div className="grid md:grid-cols-2 gap-6">
+                                        <div className="bg-white p-6 rounded-xl shadow-sm border border-amber-100 flex gap-4 hover:border-amber-300 transition-colors">
+                                            <div className="p-3 bg-amber-100 rounded-lg text-amber-700 h-fit"><MessageSquare size={20}/></div>
+                                            <div>
+                                                <strong className="block text-gray-900 text-base mb-1 font-bold">Telegram Monitoring</strong>
+                                                <span className="text-sm text-gray-600 leading-relaxed">Access to over 2 billion messages to track criminal discussions and coordination.</span>
+                                            </div>
+                                        </div>
+                                        <div className="bg-white p-6 rounded-xl shadow-sm border border-amber-100 flex gap-4 hover:border-amber-300 transition-colors">
+                                            <div className="p-3 bg-amber-100 rounded-lg text-amber-700 h-fit"><FileText size={20}/></div>
+                                            <div>
+                                                <strong className="block text-gray-900 text-base mb-1 font-bold">Infostealer Logs</strong>
+                                                <span className="text-sm text-gray-600 leading-relaxed">Data from compromised devices, including visited sites, autofill data, and payment information.</span>
+                                            </div>
+                                        </div>
+                                        <div className="bg-white p-6 rounded-xl shadow-sm border border-amber-100 flex gap-4 hover:border-amber-300 transition-colors">
+                                            <div className="p-3 bg-amber-100 rounded-lg text-amber-700 h-fit"><Database size={20}/></div>
+                                            <div>
+                                                <strong className="block text-gray-900 text-base mb-1 font-bold">Breach Repositories</strong>
+                                                <span className="text-sm text-gray-600 leading-relaxed">Leaked emails, passwords, and credentials from past public data breaches.</span>
+                                            </div>
+                                        </div>
+                                        <div className="bg-white p-6 rounded-xl shadow-sm border border-amber-100 flex gap-4 hover:border-amber-300 transition-colors">
+                                            <div className="p-3 bg-amber-100 rounded-lg text-amber-700 h-fit"><Search size={20}/></div>
+                                            <div>
+                                                <strong className="block text-gray-900 text-base mb-1 font-bold">OSINT (Open Source Intelligence)</strong>
+                                                <span className="text-sm text-gray-600 leading-relaxed">Publicly available information like social media profiles, phone-based profiling, and domain history.</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <h3 className="font-bold text-gray-900 text-xl mb-8 flex items-center gap-3">
+                                    <div className="w-1.5 h-8 bg-amber-500 rounded-full"></div>
+                                    Key "Superpowers" for Investigators
+                                </h3>
+                                <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-16">
+                                    <InfoCard title="Identity Attribution" text='This is the "Identity Engine" that links anonymous online usernames to real-world people by combining all the data sources.' icon={Fingerprint} accentColor="amber" />
+                                    <InfoCard title="AI-Powered Analysis" text="It reduces the time needed to analyze evidence from weeks down to just a few hours." icon={Zap} accentColor="amber" />
+                                    <InfoCard title="Visual Relationship Mapping" text="It creates a visual map showing how different criminals, devices, and groups are connected to each other." icon={Share2} accentColor="amber" />
+                                    <InfoCard title="Targeted Device Search" text="Investigators can search for compromised devices by specific categories or countries to find where an attack started." icon={Crosshair} accentColor="amber" />
+                                </div>
+                                
+                                 <h3 className="font-bold text-gray-900 text-xl mb-8 flex items-center gap-3">
+                                    <div className="w-1.5 h-8 bg-gray-500 rounded-full"></div>
+                                    The DeXpose Advantage
+                                </h3>
+                                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                                    <InfoCard title="Reliable Evidence" text="Because the intelligence is checked by human experts, it is accurate enough to be used in legal cases and by law enforcement." icon={CheckCircle} accentColor="neutral" />
+                                    <InfoCard title="Predictive Defense" text="It doesn't just look at what happened; it uses patterns to predict and stop future attacks before they escalate." icon={TrendingUp} accentColor="neutral" />
+                                    <InfoCard title="Hybrid Intelligence" text="It uses AI for incredible speed but keeps human analysts involved to ensure every insight is high-quality and trustworthy." icon={Zap} accentColor="neutral" />
+                                </div>
+                            </div>
+                        )}
+
+                        {/* MSPs */}
+                        {activeTab === 'msp' && (
+                            <div className="animate-slide-up">
+                                <SectionHeader 
+                                    title="DeXpose for MSPs" 
+                                    subtitle="Grow Your Cybersecurity Business" 
+                                    icon={Briefcase}
+                                    colorClass="bg-gray-900 text-white"
+                                />
+                                
+                                <p className="text-xl text-gray-600 mb-12 leading-relaxed max-w-4xl font-light">
+                                    DeXpose for MSPs is a program designed to help Managed Service Providers grow their business by offering high-value cybersecurity services under their own brand. It provides tools for finding new customers, protecting current ones, and increasing monthly income.
+                                </p>
+                                
+                                <div className="grid lg:grid-cols-2 gap-10">
+                                    <div>
+                                        <h3 className="font-bold text-gray-900 text-xl mb-8 border-b border-gray-200 pb-4">Core Services for MSPs</h3>
+                                        <FeatureList 
+                                            color="neutral"
+                                            items={[
+                                                { title: "Mispar (Prospecting Tool)", desc: "Instantly scan a potential client's website to show them their stolen passwords and dark web risks. This is used to prove the value of your services in the very first meeting." },
+                                                { title: "Continuous Dark Web Monitoring", desc: "An ongoing subscription service that watches for leaked emails, employee credentials, and mentions on hacker forums and Telegram." },
+                                                { title: "Attack Surface Mapping (ASM)", desc: 'A service that constantly discovers a client\'s internet-facing assets—like websites and cloud resources—to find hidden security weaknesses or "shadow IT".' },
+                                                { title: "Brand Protection", desc: "A premium add-on that monitors for fake websites, look-alike domains, and people impersonating company executives." }
+                                            ]}
+                                        />
+                                    </div>
+                                    <div className="bg-gray-900 rounded-3xl p-10 text-white relative overflow-hidden shadow-2xl">
+                                        <div className="absolute top-0 right-0 p-12 opacity-5 pointer-events-none"><TrendingUp size={180} /></div>
+                                        <h3 className="font-bold text-xl mb-8 flex items-center gap-3 relative z-10">
+                                            <div className="p-2 bg-gray-800 rounded-lg"><TrendingUp size={20} /></div> 
+                                            How MSPs Make Money (The Revenue Flow)
+                                        </h3>
+                                        <p className="text-sm text-gray-400 mb-8 relative z-10 font-medium">DeXpose is built to move clients through a simple sales journey:</p>
+                                        <div className="space-y-8 relative z-10">
+                                            {[
+                                                { step: "Attract", desc: 'Use a free or low-cost "Mispar" scan to find new leads.' },
+                                                { step: "Convert", desc: "Sell a detailed, one-time branded report based on that scan." },
+                                                { step: "Retain", desc: "Move the client to a monthly subscription for continuous monitoring." },
+                                                { step: "Upsell", desc: "Add more advanced services like ASM (which can be billed at $35–$80 per asset yearly) or Brand Protection." }
+                                            ].map((item, i) => (
+                                                <div key={i} className="flex gap-5 group">
+                                                    <div className="w-10 h-10 rounded-full border-2 border-gray-700 flex items-center justify-center text-sm font-bold shrink-0 group-hover:border-white group-hover:bg-white group-hover:text-black transition-all">{i+1}</div>
+                                                    <div>
+                                                        <strong className="block text-white mb-1.5 text-lg">{item.step}</strong>
+                                                        <p className="text-sm text-gray-400 leading-relaxed">{item.desc}</p>
+                                                    </div>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <h3 className="font-bold text-gray-900 text-xl mt-16 mb-8 flex items-center gap-3">
+                                    <div className="w-1.5 h-8 bg-black rounded-full"></div>
+                                    Why It Works for Your Business
+                                </h3>
+                                <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+                                    <InfoCard title="White-Label Ready" text="All reports and services can be branded with your MSP’s logo, so it looks like your own in-house technology." icon={FileText} accentColor="neutral" />
+                                     <InfoCard title="Low Effort" text="You don't need to hire your own research team; DeXpose does all the heavy lifting and data collection for you." icon={Zap} accentColor="neutral" />
+                                      <InfoCard title="Easy to Scale" text="Using the API, you can automate alerts and reporting for hundreds of clients at once without needing extra staff." icon={TrendingUp} accentColor="neutral" />
+                                       <InfoCard title="Competitive Edge" text='Offering unique data from the "underground" parts of the internet helps you stand out from generic IT providers.' icon={Swords} accentColor="neutral" />
+                                </div>
+                            </div>
+                        )}
+
+                        {/* COMPETITORS */}
+                        {activeTab === 'competitors' && (
+                            <div className="animate-slide-up">
+                                <SectionHeader 
+                                    title="Competitors" 
+                                    subtitle="DEXPOSE: THE SURGICAL RADAR (BATTLE CARD)" 
+                                    icon={Swords}
+                                    colorClass="bg-red-600 text-red-50"
+                                />
+                                
+                                <p className="text-xl text-gray-600 mb-12 leading-relaxed max-w-4xl font-light">
+                                    DeXpose is designed to be a surgical radar, not a complex platform. While competitors often focus on massive data collection and complex dashboards, DeXpose focuses on providing immediate, actionable signals that tell you exactly what an attacker could exploit right now.
+                                </p>
+                                
+                                <div className="bg-gray-900 text-white p-10 rounded-3xl mb-12 shadow-2xl relative overflow-hidden mt-8">
+                                    <div className="absolute top-0 right-0 p-12 opacity-10 rotate-12"><Crosshair size={240} /></div>
+                                    <h3 className="text-2xl font-bold mb-8 relative z-10 flex items-center gap-3">
+                                        <span className="w-2 h-8 bg-red-500 rounded-full"></span>
+                                        THE CORE PHILOSOPHY
+                                    </h3>
+                                    <div className="grid md:grid-cols-2 gap-10 relative z-10">
+                                        <div className="bg-white/5 p-8 rounded-2xl border border-white/10 backdrop-blur-sm">
+                                            <strong className="block text-red-400 mb-3 uppercase tracking-wider text-xs font-bold">Competitors (The "Platforms")</strong>
+                                            <p className="text-gray-300 leading-relaxed font-medium">Most competitors are massive platforms with many modules that require training, tuning, and dedicated analysts to manage the high volume of data (noise).</p>
+                                        </div>
+                                        <div className="bg-blue-600/10 p-8 rounded-2xl border border-blue-500/20 backdrop-blur-sm">
+                                            <strong className="block text-blue-400 mb-3 uppercase tracking-wider text-xs font-bold">DeXpose (The "Radar")</strong>
+                                            <p className="text-gray-300 leading-relaxed font-medium">DeXpose is lightweight and simple. It removes "dashboard fatigue" by sending only the signals that require immediate action, making it perfect for lean teams without a dedicated security operations center (SOC).</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <h3 className="font-bold text-gray-900 text-xl mb-8 pb-4 border-b border-gray-200">DEXPOSE VS. SPECIFIC COMPETITORS</h3>
+                                <div className="grid gap-6 mb-16">
+                                    <CompetitorCard 
+                                        competitor="SPYCLOUD"
+                                        strength="Specialized in identity and stolen credentials."
+                                        whyDeXpose="DeXpose sees the entire attack surface, not just credentials."
+                                    />
+                                    <CompetitorCard 
+                                        competitor="SOCRADAR"
+                                        strength="A massive, multi-module platform for enterprise SOCs."
+                                        whyDeXpose="DeXpose is faster, cheaper, and surgical with zero training needed."
+                                    />
+                                    <CompetitorCard 
+                                        competitor="FLARE"
+                                        strength="Modular threat-intel with many dashboards for analysts."
+                                        whyDeXpose="DeXpose is IT-leader friendly and focuses on rapid decision-making."
+                                    />
+                                    <CompetitorCard 
+                                        competitor="DIGITAL SHADOWS"
+                                        strength="High-end reputation and global risk protection."
+                                        whyDeXpose="DeXpose has zero platform overhead and is built for fast action."
+                                    />
+                                    <CompetitorCard 
+                                        competitor="ZEROFOX"
+                                        strength="Massive scale brand and fraud protection."
+                                        whyDeXpose="DeXpose is lightweight and focuses only on what attackers use to get in."
+                                    />
+                                     <CompetitorCard 
+                                        competitor="CYBLE"
+                                        strength='Broad "everything" view of dark web and cybercrime.'
+                                        whyDeXpose="DeXpose filters out the noise to tell you what actually matters today."
+                                    />
+                                </div>
+
+                                <div className="bg-blue-50 p-10 rounded-2xl border border-blue-100">
+                                    <h3 className="font-bold text-blue-900 mb-8 flex items-center gap-3 text-xl">
+                                        <div className="bg-white p-2 rounded-lg text-blue-600 shadow-sm"><LayoutDashboard size={24}/></div>
+                                        SIMPLE "HANDLING LINES" (Easy to Memorize)
+                                    </h3>
+                                    <div className="grid md:grid-cols-2 gap-6 text-sm">
+                                        {[
+                                            { t: "The Identity Difference", d: '"SpyCloud protects user identities; DeXpose protects your entire attack surface."' },
+                                            { t: "The Platform Difference", d: '"SOCRadar maps the universe; DeXpose maps your attack surface."' },
+                                            { t: "The Clarity Difference", d: '"Flare gives visibility; DeXpose gives direction."' },
+                                            { t: "The Speed Difference", d: '"ZeroFox protects your brand at scale; DeXpose protects your exposure at speed."' },
+                                            { t: "The Focus Difference", d: '"Cyble tells you everything that could matter; DeXpose tells you what actually matters today."' }
+                                        ].map((item, i) => (
+                                            <div key={i} className="bg-white p-6 rounded-xl border border-blue-100 shadow-sm hover:border-blue-300 transition-colors">
+                                                <strong className="block text-blue-700 mb-2 font-bold uppercase text-xs tracking-wide">{item.t}</strong>
+                                                <span className="text-gray-700 italic font-medium leading-relaxed">{item.d}</span>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+
+                    </main>
+                </div>
+            );
+        };
+
+        const root = createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+</body>
+</html>
