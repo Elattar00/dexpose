@@ -1,7 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-<head><!DOCTYPE html>
-<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
@@ -11,7 +9,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
-            darkMode: 'class', // Enabled manual dark mode toggling
+            darkMode: 'class',
             theme: {
                 extend: {
                     fontFamily: {
@@ -49,6 +47,7 @@
                         'fade-in': 'fadeIn 0.8s ease-out forwards',
                         'slide-up': 'slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards',
                         'float': 'float 6s ease-in-out infinite',
+                        'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
                     },
                     keyframes: {
                         fadeIn: {
@@ -65,16 +64,19 @@
                         }
                     },
                     boxShadow: {
-                        'soft': '0 4px 20px -2px rgba(0, 0, 0, 0.03)', /* Softer shadow */
+                        'soft': '0 4px 30px -4px rgba(0, 0, 0, 0.05)',
                         'soft-dark': '0 10px 40px -10px rgba(0, 0, 0, 0.8)', 
-                        'soft-hover': '0 15px 35px -5px rgba(0, 0, 0, 0.08)',
+                        'soft-hover': '0 20px 40px -5px rgba(0, 0, 0, 0.08)',
                         'glow-blue': '0 0 25px rgba(59, 130, 246, 0.15)',
                         'glow-red': '0 0 25px rgba(239, 68, 68, 0.15)',
                         'glow-amber': '0 0 25px rgba(245, 158, 11, 0.15)',
                         'glow-green': '0 0 25px rgba(16, 185, 129, 0.15)',
                         'glow-violet': '0 0 25px rgba(124, 58, 237, 0.15)',
-                        'card': '0 2px 4px -1px rgba(0, 0, 0, 0.02), 0 1px 2px -1px rgba(0, 0, 0, 0.02)',
                         'glass': '0 8px 32px 0 rgba(31, 38, 135, 0.05)',
+                    },
+                    backgroundImage: {
+                        'glass-gradient': 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))',
+                        'glass-gradient-dark': 'linear-gradient(135deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0))',
                     },
                     borderRadius: {
                         '4xl': '2rem',
@@ -102,7 +104,7 @@
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
 
         /* Custom scrollbar styling */
-        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar { width: 6px; }
         ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
         ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
@@ -122,7 +124,7 @@
             transition: background-color 0.5s ease, color 0.5s ease;
         }
 
-        /* Mesh/Grid Background */
+        /* Ambient Mesh Background */
         .ambient-bg {
             position: fixed;
             top: 0;
@@ -130,49 +132,64 @@
             width: 100vw;
             height: 100vh;
             z-index: -1;
-            background-size: 40px 40px;
+            background-size: 50px 50px; /* Larger grid for cleaner look */
             background-position: center top;
             transition: all 0.5s ease;
         }
 
-        /* Light Mode Ambient - Even Fainter */
+        /* Light Mode Ambient */
         .light-ambient {
             background-color: #f8fafc;
             background-image: 
                 linear-gradient(rgba(203, 213, 225, 0.15) 1px, transparent 1px),
                 linear-gradient(to right, rgba(203, 213, 225, 0.15) 1px, transparent 1px);
-            /* Very subtle radial glow for premium feel */
-            background: 
-                radial-gradient(circle at 50% 0%, rgba(255, 255, 255, 0.8) 0%, transparent 60%),
-                linear-gradient(rgba(203, 213, 225, 0.15) 1px, transparent 1px),
-                linear-gradient(to right, rgba(203, 213, 225, 0.15) 1px, transparent 1px);
-            box-shadow: inset 0 0 150px 80px rgba(255,255,255,0.8);
+            /* Subtle vignette */
+            box-shadow: inset 0 0 200px 100px rgba(255,255,255,0.9);
         }
 
-        /* Dark Mode Ambient - Pitch Black with extremely subtle lines */
+        /* Dark Mode Ambient - Ultra subtle */
         .dark-ambient {
-            background-color: #000000; /* Pure Black */
+            background-color: #000000;
             background-image: 
-                linear-gradient(rgba(30, 41, 59, 0.1) 1px, transparent 1px),
-                linear-gradient(to right, rgba(30, 41, 59, 0.1) 1px, transparent 1px);
-            box-shadow: inset 0 0 200px 100px #000000;
+                linear-gradient(rgba(51, 65, 85, 0.08) 1px, transparent 1px),
+                linear-gradient(to right, rgba(51, 65, 85, 0.08) 1px, transparent 1px);
+            box-shadow: inset 0 0 250px 120px #000000;
         }
 
+        /* Glass Header */
         .glass-header {
-            background: rgba(255, 255, 255, 0.7); /* More transparent */
+            background: rgba(255, 255, 255, 0.85);
             backdrop-filter: blur(20px) saturate(180%);
             -webkit-backdrop-filter: blur(20px) saturate(180%);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.5);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.6);
             transition: background 0.5s ease, border-color 0.5s ease;
         }
 
         .dark .glass-header {
-            background: rgba(2, 6, 23, 0.7); /* More transparent black */
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05); /* Very subtle border */
+            background: rgba(2, 6, 23, 0.75); 
+            border-bottom: 1px solid rgba(255, 255, 255, 0.03); 
         }
 
         .smooth-transition {
             transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+        
+        /* Card Highlight Effect */
+        .card-highlight {
+            position: relative;
+        }
+        .card-highlight::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.6), transparent);
+            opacity: 0.5;
+        }
+        .dark .card-highlight::before {
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
         }
     </style>
 </head>
@@ -194,15 +211,15 @@
         // --- UI Components ---
 
         const SectionHeader = ({ title, subtitle, icon: Icon, colorClass, gradient }) => (
-            <div className="mb-12 relative overflow-hidden rounded-[2.5rem] bg-white/70 dark:bg-slate-950/60 p-10 shadow-glass dark:shadow-soft-dark border border-white/40 dark:border-white/5 backdrop-blur-xl group transition-all duration-500">
+            <div className="mb-10 relative overflow-hidden rounded-[2.5rem] bg-white/70 dark:bg-slate-950/60 p-8 md:p-10 shadow-glass dark:shadow-soft-dark border border-white/50 dark:border-white/5 backdrop-blur-xl group transition-all duration-500 card-highlight">
                 <div className={`absolute top-0 right-0 w-80 h-80 bg-gradient-to-br ${gradient} opacity-10 dark:opacity-10 rounded-full blur-[80px] -mr-20 -mt-20 transform transition-transform duration-1000 group-hover:scale-110`}></div>
                 
-                <div className="flex flex-col md:flex-row items-start md:items-center gap-8 relative z-10">
-                    <div className={`p-5 rounded-3xl ${colorClass} shadow-xl shadow-current/20 transform transition-transform group-hover:scale-105 duration-500`}>
+                <div className="flex flex-col md:flex-row items-start md:items-center gap-6 relative z-10">
+                    <div className={`p-5 rounded-3xl ${colorClass} shadow-xl shadow-current/20 transform transition-transform group-hover:scale-105 group-hover:-rotate-3 duration-500`}>
                         <Icon size={36} className="text-white drop-shadow-sm" />
                     </div>
                     <div>
-                        <h2 className="text-3xl md:text-4xl font-extrabold tracking-tight text-slate-800 dark:text-slate-100 mb-3 transition-colors duration-300">{title}</h2>
+                        <h2 className="text-3xl md:text-4xl font-extrabold tracking-tight text-slate-800 dark:text-slate-100 mb-2 transition-colors duration-300">{title}</h2>
                         {subtitle && <p className="text-base md:text-lg text-slate-600 dark:text-slate-400 font-medium leading-relaxed max-w-4xl transition-colors duration-300">{subtitle}</p>}
                     </div>
                 </div>
@@ -212,37 +229,37 @@
         const InfoCard = ({ title, text, icon: Icon, accentColor = "blue", delay = 0 }) => {
             const themes = {
                 blue: { 
-                    container: "group-hover:border-blue-300/50 dark:group-hover:border-blue-700/50 group-hover:bg-blue-50/40 dark:group-hover:bg-blue-900/20",
+                    container: "hover:border-blue-300/50 dark:hover:border-blue-700/50 hover:bg-blue-50/40 dark:hover:bg-blue-900/10",
                     icon: "bg-blue-100 text-blue-600 dark:bg-blue-500/10 dark:text-blue-400",
                     shadow: "hover:shadow-glow-blue"
                 },
                 green: { 
-                    container: "group-hover:border-emerald-300/50 dark:group-hover:border-emerald-700/50 group-hover:bg-emerald-50/40 dark:group-hover:bg-emerald-900/20",
+                    container: "hover:border-emerald-300/50 dark:hover:border-emerald-700/50 hover:bg-emerald-50/40 dark:hover:bg-emerald-900/10",
                     icon: "bg-emerald-100 text-emerald-600 dark:bg-emerald-500/10 dark:text-emerald-400",
                     shadow: "hover:shadow-glow-green"
                 },
                 red: { 
-                    container: "group-hover:border-red-300/50 dark:group-hover:border-red-700/50 group-hover:bg-red-50/40 dark:group-hover:bg-red-900/20",
+                    container: "hover:border-red-300/50 dark:hover:border-red-700/50 hover:bg-red-50/40 dark:hover:bg-red-900/10",
                     icon: "bg-red-100 text-red-600 dark:bg-red-500/10 dark:text-red-400",
                     shadow: "hover:shadow-glow-red"
                 },
                 amber: { 
-                    container: "group-hover:border-amber-300/50 dark:group-hover:border-amber-700/50 group-hover:bg-amber-50/40 dark:group-hover:bg-amber-900/20",
+                    container: "hover:border-amber-300/50 dark:hover:border-amber-700/50 hover:bg-amber-50/40 dark:hover:bg-amber-900/10",
                     icon: "bg-amber-100 text-amber-600 dark:bg-amber-500/10 dark:text-amber-400",
                     shadow: "hover:shadow-glow-amber"
                 },
                 neutral: { 
-                    container: "group-hover:border-slate-400/50 dark:group-hover:border-slate-500/50 group-hover:bg-slate-50/40 dark:group-hover:bg-slate-800/40",
+                    container: "hover:border-slate-400/50 dark:hover:border-slate-500/50 hover:bg-slate-50/40 dark:hover:bg-slate-800/30",
                     icon: "bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-300",
                     shadow: "hover:shadow-xl"
                 },
                 purple: { 
-                    container: "group-hover:border-purple-300/50 dark:group-hover:border-purple-700/50 group-hover:bg-purple-50/40 dark:group-hover:bg-purple-900/20",
+                    container: "hover:border-purple-300/50 dark:hover:border-purple-700/50 hover:bg-purple-50/40 dark:hover:bg-purple-900/10",
                     icon: "bg-purple-100 text-purple-600 dark:bg-purple-500/10 dark:text-purple-400",
                     shadow: "hover:shadow-glow-blue"
                 },
                 violet: { 
-                    container: "group-hover:border-violet-300/50 dark:group-hover:border-violet-700/50 group-hover:bg-violet-50/40 dark:group-hover:bg-violet-900/20",
+                    container: "hover:border-violet-300/50 dark:hover:border-violet-700/50 hover:bg-violet-50/40 dark:hover:bg-violet-900/10",
                     icon: "bg-violet-100 text-violet-600 dark:bg-violet-500/10 dark:text-violet-400",
                     shadow: "hover:shadow-glow-violet"
                 }
@@ -252,17 +269,17 @@
             
             return (
                 <div 
-                    className={`group relative flex flex-col h-full bg-white/60 dark:bg-slate-900/50 backdrop-blur-lg rounded-[2rem] p-8 smooth-transition hover:-translate-y-2 border border-white/40 dark:border-white/5 ${theme.container} ${theme.shadow} shadow-glass dark:shadow-none overflow-hidden`}
+                    className={`group relative flex flex-col h-full bg-white/60 dark:bg-slate-900/40 backdrop-blur-md rounded-[2rem] p-8 smooth-transition hover:-translate-y-2 border border-white/40 dark:border-white/5 ${theme.container} ${theme.shadow} shadow-glass dark:shadow-none overflow-hidden card-highlight`}
                     style={{ animationDelay: `${delay}ms` }}
                 >
                     <div className="relative z-10 flex flex-col h-full">
                         <div className="flex items-center gap-4 mb-4">
                             {Icon && (
-                                <div className={`p-3.5 rounded-2xl transition-all duration-500 ease-out transform group-hover:scale-110 group-hover:rotate-3 ${theme.icon} shadow-sm backdrop-blur-sm`}>
+                                <div className={`p-3.5 rounded-2xl transition-all duration-500 ease-out transform group-hover:scale-110 group-hover:rotate-6 ${theme.icon} shadow-sm backdrop-blur-sm`}>
                                     <Icon size={24} />
                                 </div>
                             )}
-                            <h4 className="font-bold text-slate-800 dark:text-slate-200 text-xl leading-tight transition-colors duration-300">{title}</h4>
+                            <h4 className="font-bold text-slate-800 dark:text-slate-100 text-xl leading-tight transition-colors duration-300">{title}</h4>
                         </div>
                         <p className="text-[15px] text-slate-600 dark:text-slate-400 leading-relaxed mt-auto font-medium transition-colors duration-300">{text}</p>
                     </div>
@@ -282,7 +299,7 @@
             const theme = colors[color] || colors.blue;
 
             return (
-                <div className="bg-white/60 dark:bg-slate-900/50 backdrop-blur-lg rounded-[2rem] border border-white/40 dark:border-white/5 p-8 h-full shadow-glass dark:shadow-soft-dark hover:shadow-soft-hover smooth-transition hover:bg-white/70 dark:hover:bg-slate-900/70">
+                <div className="bg-white/60 dark:bg-slate-900/40 backdrop-blur-lg rounded-[2rem] border border-white/40 dark:border-white/5 p-8 h-full shadow-glass dark:shadow-soft-dark hover:shadow-soft-hover smooth-transition hover:bg-white/80 dark:hover:bg-slate-900/60 card-highlight">
                     {title && (
                         <h4 className={`font-bold uppercase tracking-wider text-xs mb-6 flex items-center gap-2 ${theme.text} border-b border-slate-200/50 dark:border-slate-800 pb-4`}>
                             <CheckCircle size={14} /> {title}
@@ -290,12 +307,12 @@
                     )}
                     <ul className="space-y-5">
                         {items.map((item, i) => (
-                            <li key={i} className="flex gap-5 group animate-slide-up hover:bg-slate-50/50 dark:hover:bg-slate-800/30 p-2.5 -mx-2.5 rounded-2xl transition-colors" style={{ animationDelay: `${i * 100}ms` }}>
-                                <div className={`flex-shrink-0 w-8 h-8 rounded-xl flex items-center justify-center text-[10px] font-bold text-white bg-gradient-to-br ${theme.gradient} shadow-md ${theme.shadow} group-hover:scale-110 smooth-transition`}>
+                            <li key={i} className="flex gap-5 group/item animate-slide-up hover:bg-slate-50/50 dark:hover:bg-slate-800/30 p-2.5 -mx-2.5 rounded-2xl transition-colors" style={{ animationDelay: `${i * 100}ms` }}>
+                                <div className={`flex-shrink-0 w-8 h-8 rounded-xl flex items-center justify-center text-[10px] font-bold text-white bg-gradient-to-br ${theme.gradient} shadow-md ${theme.shadow} group-hover/item:scale-110 smooth-transition`}>
                                     {i + 1}
                                 </div>
                                 <div>
-                                    <strong className="block text-slate-800 dark:text-slate-200 text-lg font-bold mb-1 group-hover:text-slate-700 dark:group-hover:text-white transition-colors">{item.title}</strong>
+                                    <strong className="block text-slate-800 dark:text-slate-200 text-lg font-bold mb-1 group-hover/item:text-slate-700 dark:group-hover/item:text-white transition-colors">{item.title}</strong>
                                     <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed font-medium">{item.desc}</p>
                                 </div>
                             </li>
@@ -306,11 +323,11 @@
         };
 
         const ProblemSolution = ({ problem, solution, problemTitle="The Problem", solutionTitle="The Solution" }) => (
-            <div className="grid lg:grid-cols-2 gap-8 my-16">
+            <div className="grid lg:grid-cols-2 gap-8 my-12">
                 {/* Problem Card */}
                 <div className="relative group h-full">
                     <div className="absolute inset-0 bg-red-50 dark:bg-red-900/5 rounded-[2rem] transform rotate-1 group-hover:rotate-2 transition-transform duration-500"></div>
-                    <div className="relative bg-white/60 dark:bg-slate-950/60 backdrop-blur-lg rounded-[2rem] border border-white/40 dark:border-white/5 shadow-glass dark:shadow-soft-dark p-8 h-full">
+                    <div className="relative bg-white/60 dark:bg-slate-950/60 backdrop-blur-lg rounded-[2rem] border border-white/40 dark:border-white/5 shadow-glass dark:shadow-soft-dark p-8 h-full card-highlight">
                         <h3 className="font-bold text-slate-800 dark:text-white flex items-center gap-3 mb-8 text-xl">
                             <div className="p-2.5 bg-red-50 dark:bg-red-900/20 rounded-xl text-red-500 dark:text-red-400 shadow-sm"><AlertTriangle size={24}/></div>
                             {problemTitle}
@@ -332,7 +349,7 @@
                 {/* Solution Card */}
                 <div className="relative group h-full">
                     <div className="absolute inset-0 bg-emerald-50 dark:bg-emerald-900/5 rounded-[2rem] transform -rotate-1 group-hover:-rotate-2 transition-transform duration-500"></div>
-                    <div className="relative bg-white/60 dark:bg-slate-950/60 backdrop-blur-lg rounded-[2rem] border border-white/40 dark:border-white/5 shadow-glass dark:shadow-soft-dark p-8 h-full">
+                    <div className="relative bg-white/60 dark:bg-slate-950/60 backdrop-blur-lg rounded-[2rem] border border-white/40 dark:border-white/5 shadow-glass dark:shadow-soft-dark p-8 h-full card-highlight">
                         <h3 className="font-bold text-slate-800 dark:text-white flex items-center gap-3 mb-8 text-xl">
                             <div className="p-2.5 bg-emerald-50 dark:bg-emerald-900/20 rounded-xl text-emerald-500 dark:text-emerald-400 shadow-sm"><Zap size={24}/></div>
                             {solutionTitle}
@@ -354,8 +371,8 @@
         );
 
         const CompetitorCard = ({ competitor, strength, whyDeXpose }) => (
-            <div className="group relative bg-white/60 dark:bg-slate-900/50 backdrop-blur-lg border border-white/40 dark:border-white/5 rounded-[2rem] p-8 smooth-transition hover:shadow-soft-hover dark:hover:shadow-glow-blue hover:-translate-y-1 overflow-hidden">
-                <div className="absolute top-0 right-0 w-32 h-32 bg-slate-50 dark:bg-slate-700/30 rounded-full blur-2xl -mr-10 -mt-10 transition-opacity opacity-50 group-hover:opacity-100"></div>
+            <div className="group relative bg-white/60 dark:bg-slate-900/40 backdrop-blur-lg border border-white/40 dark:border-white/5 rounded-[2rem] p-8 smooth-transition hover:shadow-soft-hover dark:hover:shadow-glow-blue hover:-translate-y-1 overflow-hidden card-highlight">
+                <div className="absolute top-0 right-0 w-32 h-32 bg-slate-50 dark:bg-slate-700/20 rounded-full blur-2xl -mr-10 -mt-10 transition-opacity opacity-50 group-hover:opacity-100"></div>
                 
                 <div className="flex justify-between items-center mb-6 relative z-10 border-b border-slate-100 dark:border-slate-800 pb-4">
                     <h4 className="font-black text-slate-800 dark:text-white uppercase tracking-tight text-xl group-hover:text-red-600 dark:group-hover:text-red-400 transition-colors">{competitor}</h4>
@@ -410,7 +427,7 @@
                     {/* Static Header */}
                     <header className="relative z-50 pt-0 px-0 mb-10">
                         <div className="mx-auto max-w-6xl glass-header border-b shadow-glass dark:shadow-none rounded-b-3xl md:rounded-b-[2.5rem]">
-                            <div className="px-6 py-6">
+                            <div className="px-6 py-5">
                                 <div className="flex justify-between items-center mb-6">
                                     <div className="flex items-center gap-4">
                                         <div className="bg-slate-900 dark:bg-slate-800 text-white dark:text-blue-400 w-12 h-12 rounded-2xl flex items-center justify-center shadow-lg shadow-slate-400/50 dark:shadow-none transition-colors duration-300">
@@ -442,7 +459,7 @@
                                                 relative px-5 py-3 rounded-2xl text-xs font-bold uppercase tracking-wide transition-all duration-300 whitespace-nowrap flex items-center gap-2.5 border backdrop-blur-sm
                                                 ${activeTab === tab.id 
                                                     ? 'bg-slate-900 dark:bg-slate-800 text-white dark:text-blue-300 border-slate-900 dark:border-slate-700 shadow-md shadow-slate-200 dark:shadow-slate-900/50 transform scale-[1.02]' 
-                                                    : 'bg-white/40 dark:bg-slate-800/40 text-slate-500 dark:text-slate-400 border-slate-200 dark:border-transparent hover:bg-white/80 dark:hover:bg-slate-700/80 hover:text-slate-900 dark:hover:text-white hover:shadow-sm'
+                                                    : 'bg-white/40 dark:bg-slate-800/20 text-slate-500 dark:text-slate-400 border-slate-200 dark:border-transparent hover:bg-white/80 dark:hover:bg-slate-700/80 hover:text-slate-900 dark:hover:text-white hover:shadow-sm'
                                                 }
                                             `}
                                         >
@@ -972,996 +989,7 @@
                                             { t: "The Speed Difference", d: '"ZeroFox protects your brand at scale; DeXpose protects your exposure at speed."' },
                                             { t: "The Focus Difference", d: '"Cyble tells you everything that could matter; DeXpose tells you what actually matters today."' }
                                         ].map((item, i) => (
-                                            <div key={i} className="bg-white/80 dark:bg-slate-800/60 p-6 rounded-[2rem] border border-blue-100/50 dark:border-blue-900/30 shadow-card hover:border-blue-300 dark:hover:border-blue-700 hover:shadow-lg transition-all duration-300 hover:-translate-y-1 backdrop-blur-sm">
-                                                <strong className="block text-blue-600 dark:text-blue-400 mb-2 font-bold uppercase text-xs tracking-wider border-b border-blue-50 dark:border-blue-900/50 pb-2">{item.t}</strong>
-                                                <span className="text-slate-600 dark:text-slate-400 italic font-medium leading-relaxed block text-lg">{item.d}</span>
-                                            </div>
-                                        ))}
-                                    </div>
-                                </div>
-                            </div>
-                        )}
-
-                    </main>
-                </div>
-            );
-        };
-
-        const root = createRoot(document.getElementById('root'));
-        root.render(<App />);
-    </script>
-</body>
-</html>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>DeXpose | Product Knowledge</title>
-    
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            darkMode: 'class', // Enabled manual dark mode toggling
-            theme: {
-                extend: {
-                    fontFamily: {
-                        sans: ['Inter', 'system-ui', 'sans-serif'],
-                    },
-                    colors: {
-                        slate: {
-                            50: '#f8fafc',
-                            100: '#f1f5f9',
-                            200: '#e2e8f0',
-                            300: '#cbd5e1',
-                            400: '#94a3b8',
-                            500: '#64748b',
-                            600: '#475569',
-                            700: '#334155',
-                            800: '#1e293b',
-                            900: '#0f172a',
-                            950: '#020617', 
-                        },
-                        violet: {
-                            50: '#f5f3ff',
-                            100: '#ede9fe',
-                            200: '#ddd6fe',
-                            300: '#c4b5fd',
-                            400: '#a78bfa',
-                            500: '#8b5cf6',
-                            600: '#7c3aed',
-                            700: '#6d28d9',
-                            800: '#5b21b6',
-                            900: '#4c1d95',
-                            950: '#2e1065',
-                        },
-                    },
-                    animation: {
-                        'fade-in': 'fadeIn 0.8s ease-out forwards',
-                        'slide-up': 'slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards',
-                        'float': 'float 6s ease-in-out infinite',
-                    },
-                    keyframes: {
-                        fadeIn: {
-                            '0%': { opacity: '0', filter: 'blur(10px)' },
-                            '100%': { opacity: '1', filter: 'blur(0)' },
-                        },
-                        slideUp: {
-                            '0%': { transform: 'translateY(20px)', opacity: '0' },
-                            '100%': { transform: 'translateY(0)', opacity: '1' },
-                        },
-                        float: {
-                            '0%, 100%': { transform: 'translateY(0)' },
-                            '50%': { transform: 'translateY(-10px)' },
-                        }
-                    },
-                    boxShadow: {
-                        'soft': '0 4px 20px -2px rgba(0, 0, 0, 0.03)', /* Softer shadow */
-                        'soft-dark': '0 10px 40px -10px rgba(0, 0, 0, 0.8)', 
-                        'soft-hover': '0 15px 35px -5px rgba(0, 0, 0, 0.08)',
-                        'glow-blue': '0 0 25px rgba(59, 130, 246, 0.15)',
-                        'glow-red': '0 0 25px rgba(239, 68, 68, 0.15)',
-                        'glow-amber': '0 0 25px rgba(245, 158, 11, 0.15)',
-                        'glow-green': '0 0 25px rgba(16, 185, 129, 0.15)',
-                        'glow-violet': '0 0 25px rgba(124, 58, 237, 0.15)',
-                        'card': '0 2px 4px -1px rgba(0, 0, 0, 0.02), 0 1px 2px -1px rgba(0, 0, 0, 0.02)',
-                        'glass': '0 8px 32px 0 rgba(31, 38, 135, 0.05)',
-                    },
-                    borderRadius: {
-                        '4xl': '2rem',
-                    }
-                }
-            }
-        }
-    </script>
-    
-    <!-- Babel for JSX compilation -->
-    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-
-    <!-- Import Map -->
-    <script type="importmap">
-    {
-        "imports": {
-            "react": "https://esm.sh/react@18.2.0",
-            "react-dom/client": "https://esm.sh/react-dom@18.2.0/client",
-            "lucide-react": "https://esm.sh/lucide-react@0.263.1"
-        }
-    }
-    </script>
-
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
-
-        /* Custom scrollbar styling */
-        ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
-        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
-        
-        /* Dark mode scrollbar */
-        .dark ::-webkit-scrollbar-thumb { background: #334155; border: 2px solid #000000; }
-        .dark ::-webkit-scrollbar-thumb:hover { background: #475569; }
-
-        .no-scrollbar::-webkit-scrollbar { display: none; }
-        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
-
-        body { 
-            font-family: 'Inter', sans-serif; 
-            background-color: #f8fafc;
-            color: #334155;
-            -webkit-font-smoothing: antialiased;
-            transition: background-color 0.5s ease, color 0.5s ease;
-        }
-
-        /* Mesh/Grid Background */
-        .ambient-bg {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            z-index: -1;
-            background-size: 40px 40px;
-            background-position: center top;
-            transition: all 0.5s ease;
-        }
-
-        /* Light Mode Ambient - Even Fainter */
-        .light-ambient {
-            background-color: #f8fafc;
-            background-image: 
-                linear-gradient(rgba(203, 213, 225, 0.15) 1px, transparent 1px),
-                linear-gradient(to right, rgba(203, 213, 225, 0.15) 1px, transparent 1px);
-            /* Very subtle radial glow for premium feel */
-            background: 
-                radial-gradient(circle at 50% 0%, rgba(255, 255, 255, 0.8) 0%, transparent 60%),
-                linear-gradient(rgba(203, 213, 225, 0.15) 1px, transparent 1px),
-                linear-gradient(to right, rgba(203, 213, 225, 0.15) 1px, transparent 1px);
-            box-shadow: inset 0 0 150px 80px rgba(255,255,255,0.8);
-        }
-
-        /* Dark Mode Ambient - Pitch Black with extremely subtle lines */
-        .dark-ambient {
-            background-color: #000000; /* Pure Black */
-            background-image: 
-                linear-gradient(rgba(30, 41, 59, 0.1) 1px, transparent 1px),
-                linear-gradient(to right, rgba(30, 41, 59, 0.1) 1px, transparent 1px);
-            box-shadow: inset 0 0 200px 100px #000000;
-        }
-
-        .glass-header {
-            background: rgba(255, 255, 255, 0.7); /* More transparent */
-            backdrop-filter: blur(20px) saturate(180%);
-            -webkit-backdrop-filter: blur(20px) saturate(180%);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.5);
-            transition: background 0.5s ease, border-color 0.5s ease;
-        }
-
-        .dark .glass-header {
-            background: rgba(2, 6, 23, 0.7); /* More transparent black */
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05); /* Very subtle border */
-        }
-
-        .smooth-transition {
-            transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
-        }
-    </style>
-</head>
-<body class="min-h-screen">
-    <div id="root"></div>
-
-    <script type="text/babel" data-type="module">
-        import { createRoot } from 'react-dom/client';
-        import React, { useState, useEffect } from 'react';
-        import { 
-            Shield, Globe, Code, Siren, Briefcase, Swords, 
-            Target, Eye, Lock, Smartphone, Search, AlertTriangle, 
-            CheckCircle, Zap, TrendingUp, UserCheck, Database, FileText,
-            LayoutDashboard, EyeOff, Crosshair, Fingerprint,
-            ShieldCheck, Share2, Layers, AlertOctagon, Monitor,
-            Clock, MessageSquare, Users, Activity, Radar, Moon, Sun
-        } from 'lucide-react';
-
-        // --- UI Components ---
-
-        const SectionHeader = ({ title, subtitle, icon: Icon, colorClass, gradient }) => (
-            <div className="mb-12 relative overflow-hidden rounded-[2.5rem] bg-white/70 dark:bg-slate-950/60 p-10 shadow-glass dark:shadow-soft-dark border border-white/40 dark:border-white/5 backdrop-blur-xl group transition-all duration-500">
-                <div className={`absolute top-0 right-0 w-80 h-80 bg-gradient-to-br ${gradient} opacity-10 dark:opacity-10 rounded-full blur-[80px] -mr-20 -mt-20 transform transition-transform duration-1000 group-hover:scale-110`}></div>
-                
-                <div className="flex flex-col md:flex-row items-start md:items-center gap-8 relative z-10">
-                    <div className={`p-5 rounded-3xl ${colorClass} shadow-xl shadow-current/20 transform transition-transform group-hover:scale-105 duration-500`}>
-                        <Icon size={36} className="text-white drop-shadow-sm" />
-                    </div>
-                    <div>
-                        <h2 className="text-3xl md:text-4xl font-extrabold tracking-tight text-slate-800 dark:text-slate-100 mb-3 transition-colors duration-300">{title}</h2>
-                        {subtitle && <p className="text-base md:text-lg text-slate-600 dark:text-slate-400 font-medium leading-relaxed max-w-4xl transition-colors duration-300">{subtitle}</p>}
-                    </div>
-                </div>
-            </div>
-        );
-
-        const InfoCard = ({ title, text, icon: Icon, accentColor = "blue", delay = 0 }) => {
-            const themes = {
-                blue: { 
-                    container: "group-hover:border-blue-300/50 dark:group-hover:border-blue-700/50 group-hover:bg-blue-50/40 dark:group-hover:bg-blue-900/20",
-                    icon: "bg-blue-100 text-blue-600 dark:bg-blue-500/10 dark:text-blue-400",
-                    shadow: "hover:shadow-glow-blue"
-                },
-                green: { 
-                    container: "group-hover:border-emerald-300/50 dark:group-hover:border-emerald-700/50 group-hover:bg-emerald-50/40 dark:group-hover:bg-emerald-900/20",
-                    icon: "bg-emerald-100 text-emerald-600 dark:bg-emerald-500/10 dark:text-emerald-400",
-                    shadow: "hover:shadow-glow-green"
-                },
-                red: { 
-                    container: "group-hover:border-red-300/50 dark:group-hover:border-red-700/50 group-hover:bg-red-50/40 dark:group-hover:bg-red-900/20",
-                    icon: "bg-red-100 text-red-600 dark:bg-red-500/10 dark:text-red-400",
-                    shadow: "hover:shadow-glow-red"
-                },
-                amber: { 
-                    container: "group-hover:border-amber-300/50 dark:group-hover:border-amber-700/50 group-hover:bg-amber-50/40 dark:group-hover:bg-amber-900/20",
-                    icon: "bg-amber-100 text-amber-600 dark:bg-amber-500/10 dark:text-amber-400",
-                    shadow: "hover:shadow-glow-amber"
-                },
-                neutral: { 
-                    container: "group-hover:border-slate-400/50 dark:group-hover:border-slate-500/50 group-hover:bg-slate-50/40 dark:group-hover:bg-slate-800/40",
-                    icon: "bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-300",
-                    shadow: "hover:shadow-xl"
-                },
-                purple: { 
-                    container: "group-hover:border-purple-300/50 dark:group-hover:border-purple-700/50 group-hover:bg-purple-50/40 dark:group-hover:bg-purple-900/20",
-                    icon: "bg-purple-100 text-purple-600 dark:bg-purple-500/10 dark:text-purple-400",
-                    shadow: "hover:shadow-glow-blue"
-                },
-                violet: { 
-                    container: "group-hover:border-violet-300/50 dark:group-hover:border-violet-700/50 group-hover:bg-violet-50/40 dark:group-hover:bg-violet-900/20",
-                    icon: "bg-violet-100 text-violet-600 dark:bg-violet-500/10 dark:text-violet-400",
-                    shadow: "hover:shadow-glow-violet"
-                }
-            };
-            
-            const theme = themes[accentColor] || themes.blue;
-            
-            return (
-                <div 
-                    className={`group relative flex flex-col h-full bg-white/60 dark:bg-slate-900/50 backdrop-blur-lg rounded-[2rem] p-8 smooth-transition hover:-translate-y-2 border border-white/40 dark:border-white/5 ${theme.container} ${theme.shadow} shadow-glass dark:shadow-none overflow-hidden`}
-                    style={{ animationDelay: `${delay}ms` }}
-                >
-                    <div className="relative z-10 flex flex-col h-full">
-                        <div className="flex items-center gap-4 mb-4">
-                            {Icon && (
-                                <div className={`p-3.5 rounded-2xl transition-all duration-500 ease-out transform group-hover:scale-110 group-hover:rotate-3 ${theme.icon} shadow-sm backdrop-blur-sm`}>
-                                    <Icon size={24} />
-                                </div>
-                            )}
-                            <h4 className="font-bold text-slate-800 dark:text-slate-200 text-xl leading-tight transition-colors duration-300">{title}</h4>
-                        </div>
-                        <p className="text-[15px] text-slate-600 dark:text-slate-400 leading-relaxed mt-auto font-medium transition-colors duration-300">{text}</p>
-                    </div>
-                </div>
-            );
-        };
-
-        const FeatureList = ({ title, items, color = "blue" }) => {
-            const colors = {
-                blue: { text: "text-blue-600 dark:text-blue-400", gradient: "from-blue-500 to-blue-600", shadow: "shadow-blue-200 dark:shadow-none" },
-                green: { text: "text-emerald-600 dark:text-emerald-400", gradient: "from-emerald-500 to-emerald-600", shadow: "shadow-emerald-200 dark:shadow-none" },
-                red: { text: "text-red-600 dark:text-red-400", gradient: "from-red-500 to-red-600", shadow: "shadow-red-200 dark:shadow-none" },
-                amber: { text: "text-amber-600 dark:text-amber-400", gradient: "from-amber-500 to-amber-600", shadow: "shadow-amber-200 dark:shadow-none" },
-                neutral: { text: "text-slate-700 dark:text-slate-300", gradient: "from-slate-700 to-slate-800", shadow: "shadow-slate-200 dark:shadow-none" },
-                violet: { text: "text-violet-600 dark:text-violet-400", gradient: "from-violet-500 to-violet-600", shadow: "shadow-violet-200 dark:shadow-none" }
-            };
-            const theme = colors[color] || colors.blue;
-
-            return (
-                <div className="bg-white/60 dark:bg-slate-900/50 backdrop-blur-lg rounded-[2rem] border border-white/40 dark:border-white/5 p-8 h-full shadow-glass dark:shadow-soft-dark hover:shadow-soft-hover smooth-transition hover:bg-white/70 dark:hover:bg-slate-900/70">
-                    {title && (
-                        <h4 className={`font-bold uppercase tracking-wider text-xs mb-6 flex items-center gap-2 ${theme.text} border-b border-slate-200/50 dark:border-slate-800 pb-4`}>
-                            <CheckCircle size={14} /> {title}
-                        </h4>
-                    )}
-                    <ul className="space-y-5">
-                        {items.map((item, i) => (
-                            <li key={i} className="flex gap-5 group animate-slide-up hover:bg-slate-50/50 dark:hover:bg-slate-800/30 p-2.5 -mx-2.5 rounded-2xl transition-colors" style={{ animationDelay: `${i * 100}ms` }}>
-                                <div className={`flex-shrink-0 w-8 h-8 rounded-xl flex items-center justify-center text-[10px] font-bold text-white bg-gradient-to-br ${theme.gradient} shadow-md ${theme.shadow} group-hover:scale-110 smooth-transition`}>
-                                    {i + 1}
-                                </div>
-                                <div>
-                                    <strong className="block text-slate-800 dark:text-slate-200 text-lg font-bold mb-1 group-hover:text-slate-700 dark:group-hover:text-white transition-colors">{item.title}</strong>
-                                    <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed font-medium">{item.desc}</p>
-                                </div>
-                            </li>
-                        ))}
-                    </ul>
-                </div>
-            );
-        };
-
-        const ProblemSolution = ({ problem, solution, problemTitle="The Problem", solutionTitle="The Solution" }) => (
-            <div className="grid lg:grid-cols-2 gap-8 my-16">
-                {/* Problem Card */}
-                <div className="relative group h-full">
-                    <div className="absolute inset-0 bg-red-50 dark:bg-red-900/5 rounded-[2rem] transform rotate-1 group-hover:rotate-2 transition-transform duration-500"></div>
-                    <div className="relative bg-white/60 dark:bg-slate-950/60 backdrop-blur-lg rounded-[2rem] border border-white/40 dark:border-white/5 shadow-glass dark:shadow-soft-dark p-8 h-full">
-                        <h3 className="font-bold text-slate-800 dark:text-white flex items-center gap-3 mb-8 text-xl">
-                            <div className="p-2.5 bg-red-50 dark:bg-red-900/20 rounded-xl text-red-500 dark:text-red-400 shadow-sm"><AlertTriangle size={24}/></div>
-                            {problemTitle}
-                        </h3>
-                        <div className="space-y-5">
-                            {problem.map((p, i) => (
-                                <div key={i} className="flex gap-4 p-4 rounded-2xl bg-red-50/30 dark:bg-red-900/10 border border-transparent hover:border-red-100 dark:hover:border-red-800 hover:bg-red-50/60 dark:hover:bg-red-900/20 transition-all duration-300">
-                                    <div className="w-1 h-auto bg-red-300 dark:bg-red-500/50 rounded-full flex-shrink-0"></div>
-                                    <div>
-                                        <strong className="block text-red-700 dark:text-red-400 text-[11px] uppercase tracking-wide mb-1 font-bold">{p.title}</strong>
-                                        <p className="text-sm text-slate-700 dark:text-slate-300 font-medium leading-relaxed">{p.desc}</p>
-                                    </div>
-                                </div>
-                            ))}
-                        </div>
-                    </div>
-                </div>
-                
-                {/* Solution Card */}
-                <div className="relative group h-full">
-                    <div className="absolute inset-0 bg-emerald-50 dark:bg-emerald-900/5 rounded-[2rem] transform -rotate-1 group-hover:-rotate-2 transition-transform duration-500"></div>
-                    <div className="relative bg-white/60 dark:bg-slate-950/60 backdrop-blur-lg rounded-[2rem] border border-white/40 dark:border-white/5 shadow-glass dark:shadow-soft-dark p-8 h-full">
-                        <h3 className="font-bold text-slate-800 dark:text-white flex items-center gap-3 mb-8 text-xl">
-                            <div className="p-2.5 bg-emerald-50 dark:bg-emerald-900/20 rounded-xl text-emerald-500 dark:text-emerald-400 shadow-sm"><Zap size={24}/></div>
-                            {solutionTitle}
-                        </h3>
-                        <div className="space-y-5">
-                            {solution.map((s, i) => (
-                                <div key={i} className="flex gap-4 p-4 rounded-2xl bg-emerald-50/30 dark:bg-emerald-900/10 border border-transparent hover:border-emerald-100 dark:hover:border-emerald-800 hover:bg-emerald-50/60 dark:hover:bg-emerald-900/20 transition-all duration-300">
-                                    <div className="w-1 h-auto bg-emerald-300 dark:bg-emerald-500/50 rounded-full flex-shrink-0"></div>
-                                    <div>
-                                        <strong className="block text-emerald-700 dark:text-emerald-400 text-[11px] uppercase tracking-wide mb-1 font-bold">{s.title}</strong>
-                                        <p className="text-sm text-slate-700 dark:text-slate-300 font-medium leading-relaxed">{s.desc}</p>
-                                    </div>
-                                </div>
-                            ))}
-                        </div>
-                    </div>
-                </div>
-            </div>
-        );
-
-        const CompetitorCard = ({ competitor, strength, whyDeXpose }) => (
-            <div className="group relative bg-white/60 dark:bg-slate-900/50 backdrop-blur-lg border border-white/40 dark:border-white/5 rounded-[2rem] p-8 smooth-transition hover:shadow-soft-hover dark:hover:shadow-glow-blue hover:-translate-y-1 overflow-hidden">
-                <div className="absolute top-0 right-0 w-32 h-32 bg-slate-50 dark:bg-slate-700/30 rounded-full blur-2xl -mr-10 -mt-10 transition-opacity opacity-50 group-hover:opacity-100"></div>
-                
-                <div className="flex justify-between items-center mb-6 relative z-10 border-b border-slate-100 dark:border-slate-800 pb-4">
-                    <h4 className="font-black text-slate-800 dark:text-white uppercase tracking-tight text-xl group-hover:text-red-600 dark:group-hover:text-red-400 transition-colors">{competitor}</h4>
-                    <div className="p-2 bg-slate-50 dark:bg-slate-800 rounded-xl group-hover:bg-red-50 dark:group-hover:bg-red-900/20 group-hover:text-red-600 dark:group-hover:text-red-400 transition-all shadow-sm">
-                        <Swords size={20} />
-                    </div>
-                </div>
-                
-                <div className="grid md:grid-cols-2 gap-6 text-sm relative z-10">
-                    <div className="bg-slate-50/60 dark:bg-slate-900/60 p-5 rounded-2xl border border-slate-100 dark:border-slate-800 group-hover:bg-white dark:group-hover:bg-slate-800 transition-colors">
-                        <span className="flex items-center gap-2 text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase mb-2 tracking-wider">
-                            <Shield size={12} /> Their Strength
-                        </span>
-                        <p className="text-slate-600 dark:text-slate-300 font-medium text-sm leading-relaxed">{strength}</p>
-                    </div>
-                    <div className="bg-blue-50/60 dark:bg-blue-900/10 p-5 rounded-2xl border border-blue-100 dark:border-blue-900/30 group-hover:bg-blue-600 group-hover:border-blue-500 smooth-transition shadow-sm">
-                        <span className="flex items-center gap-2 text-[10px] font-bold text-blue-600 dark:text-blue-400 group-hover:text-blue-100 uppercase mb-2 tracking-wider">
-                            <Zap size={12} /> Why DeXpose
-                        </span>
-                        <p className="text-slate-800 dark:text-slate-100 font-bold text-sm leading-relaxed group-hover:text-white">{whyDeXpose}</p>
-                    </div>
-                </div>
-            </div>
-        );
-
-        // --- Main Application ---
-
-        const App = () => {
-            const [activeTab, setActiveTab] = useState('darkweb');
-            const [darkMode, setDarkMode] = useState(false);
-
-            const toggleDarkMode = () => {
-                setDarkMode(!darkMode);
-            };
-
-            const navItems = [
-                { id: 'darkweb', label: 'Dark Web', icon: Radar },
-                { id: 'asm', label: 'Attack Surface', icon: Globe },
-                { id: 'brand', label: 'Brand', icon: ShieldCheck },
-                { id: 'api', label: 'API', icon: Code },
-                { id: 'investigation', label: 'Cybercrime', icon: Siren },
-                { id: 'msp', label: 'For MSPs', icon: Briefcase },
-                { id: 'competitors', label: 'Battle Card', icon: Swords },
-            ];
-
-            return (
-                <div className={`${darkMode ? 'dark' : ''} font-sans selection:bg-blue-200 selection:text-blue-900 min-h-screen transition-colors duration-500`}>
-                    
-                    {/* Ambient Background Layer */}
-                    <div className={`ambient-bg ${darkMode ? 'dark-ambient' : 'light-ambient'}`}></div>
-
-                    {/* Static Header */}
-                    <header className="relative z-50 pt-0 px-0 mb-10">
-                        <div className="mx-auto max-w-6xl glass-header border-b shadow-glass dark:shadow-none rounded-b-3xl md:rounded-b-[2.5rem]">
-                            <div className="px-6 py-6">
-                                <div className="flex justify-between items-center mb-6">
-                                    <div className="flex items-center gap-4">
-                                        <div className="bg-slate-900 dark:bg-slate-800 text-white dark:text-blue-400 w-12 h-12 rounded-2xl flex items-center justify-center shadow-lg shadow-slate-400/50 dark:shadow-none transition-colors duration-300">
-                                            <Shield size={24} strokeWidth={2.5} />
-                                        </div>
-                                        <div>
-                                            <h1 className="text-2xl font-black text-slate-800 dark:text-white leading-none tracking-tight mb-1 transition-colors duration-300">DeXpose</h1>
-                                            <p className="text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-[0.25em] transition-colors duration-300">Knowledge Base</p>
-                                        </div>
-                                    </div>
-
-                                    {/* Dark Mode Toggle */}
-                                    <button 
-                                        onClick={toggleDarkMode}
-                                        className="p-3 rounded-full bg-slate-100/50 dark:bg-slate-800/50 backdrop-blur text-slate-600 dark:text-yellow-400 hover:bg-slate-200 dark:hover:bg-slate-700 transition-all duration-300 focus:outline-none border border-slate-200 dark:border-slate-700"
-                                        aria-label="Toggle Dark Mode"
-                                    >
-                                        {darkMode ? <Sun size={20} /> : <Moon size={20} />}
-                                    </button>
-                                </div>
-
-                                {/* Tabs */}
-                                <div className="flex overflow-x-auto gap-3 pb-2 -mx-6 px-6 md:mx-0 md:px-0 no-scrollbar pt-1 scroll-smooth">
-                                    {navItems.map((tab) => (
-                                        <button
-                                            key={tab.id}
-                                            onClick={() => setActiveTab(tab.id)}
-                                            className={`
-                                                relative px-5 py-3 rounded-2xl text-xs font-bold uppercase tracking-wide transition-all duration-300 whitespace-nowrap flex items-center gap-2.5 border backdrop-blur-sm
-                                                ${activeTab === tab.id 
-                                                    ? 'bg-slate-900 dark:bg-slate-800 text-white dark:text-blue-300 border-slate-900 dark:border-slate-700 shadow-md shadow-slate-200 dark:shadow-slate-900/50 transform scale-[1.02]' 
-                                                    : 'bg-white/40 dark:bg-slate-800/40 text-slate-500 dark:text-slate-400 border-slate-200 dark:border-transparent hover:bg-white/80 dark:hover:bg-slate-700/80 hover:text-slate-900 dark:hover:text-white hover:shadow-sm'
-                                                }
-                                            `}
-                                        >
-                                            <tab.icon size={16} className={`${activeTab === tab.id ? 'text-blue-300 dark:text-blue-400' : ''}`} />
-                                            {tab.label}
-                                        </button>
-                                    ))}
-                                </div>
-                            </div>
-                        </div>
-                    </header>
-
-                    <main className="max-w-6xl mx-auto px-4 md:px-6 py-4 pb-24">
-
-                        {/* DARK WEB MONITORING */}
-                        {activeTab === 'darkweb' && (
-                            <div className="animate-fade-in">
-                                <SectionHeader 
-                                    title="Dark Web Monitoring" 
-                                    subtitle="DeXpose Dark Web Monitoring is a 'radar' for the hidden parts of the internet, designed to find stolen data before hackers can use it. It is available as a general security tool and a specialized version for Managed Service Providers (MSPs)." 
-                                    icon={Radar}
-                                    colorClass="bg-slate-900 dark:bg-blue-600"
-                                    gradient="from-slate-400 to-slate-900 dark:from-slate-700 dark:to-slate-950"
-                                />
-                                
-                                <ProblemSolution 
-                                    problemTitle='The Problem: "Invisible Threats"'
-                                    solutionTitle='How It Works'
-                                    problem={[
-                                        { title: "The Underground Economy", desc: "Hackers buy and sell stolen passwords, company data, and ransomware kits on the dark web and encrypted apps like Telegram." },
-                                        { title: "Hidden Breaches", desc: "Most companies don't know their data has been stolen until a major attack happens." },
-                                        { title: "Standard Tools Miss This", desc: "Regular security software often cannot see into the private forums where criminals trade information." }
-                                    ]}
-                                    solution={[
-                                        { title: "Massive Data Collection", desc: "It crawls over 15,000 sources, including the dark web, black markets, and private messaging apps (Discord and Telegram)." },
-                                        { title: "AI & Human Analysis", desc: "An AI engine scans millions of records to find mentions of your company, while human experts verify the results to remove false alarms." },
-                                        { title: "Real-Time Alerts", desc: "If your data is found, you get an instant notification via email or your security portal so you can act immediately." }
-                                    ]}
-                                />
-
-                                <div className="mb-16">
-                                    <div className="text-center mb-10">
-                                        <div className="inline-flex items-center gap-2 px-4 py-2 bg-emerald-50/80 dark:bg-emerald-900/30 rounded-full text-emerald-600 dark:text-emerald-400 font-bold text-[10px] uppercase tracking-wider mb-4 border border-emerald-100 dark:border-emerald-800 shadow-sm transition-colors backdrop-blur-sm">
-                                            <Activity size={14}/> Key "Radar" Features
-                                        </div>
-                                        <h3 className="text-3xl md:text-4xl font-bold text-slate-800 dark:text-white transition-colors">What The Radar Sees</h3>
-                                    </div>
-                                    
-                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                                        <InfoCard title="Credential & Identity Monitoring" text="Detects leaked employee and customer usernames, passwords, and personal information." icon={UserCheck} accentColor="blue" delay={100} />
-                                        <InfoCard title="VIP & Executive Protection" text='Specifically watches for threats or "doxxing" attempts against company leaders.' icon={CheckCircle} accentColor="purple" delay={200} />
-                                        <InfoCard title="Device Compromise View" text='Shows if an employee&#39;s computer has been infected with "infostealer" malware that captures their files and cookies.' icon={Smartphone} accentColor="red" delay={300} />
-                                        <InfoCard title="Ransomware Intelligence" text="Tracks ransomware groups to see if they are planning to target your organization." icon={Lock} accentColor="amber" delay={400} />
-                                    </div>
-                                </div>
-
-                                <div className="relative overflow-hidden rounded-[2rem] bg-slate-900 p-10 md:p-12 text-white shadow-xl dark:shadow-glow-blue/20 group transition-all duration-700 hover:shadow-glow-blue mb-16">
-                                    <div className="absolute top-0 right-0 p-10 opacity-5 group-hover:opacity-10 transition-all duration-700 ease-in-out transform group-hover:scale-110"><Briefcase size={300}/></div>
-                                    <div className="absolute -left-20 -bottom-20 w-80 h-80 bg-blue-600 opacity-20 blur-[100px] rounded-full animate-float"></div>
-                                    
-                                    <div className="relative z-10">
-                                        <div className="flex items-center gap-6 mb-10">
-                                            <div className="p-4 bg-white/10 backdrop-blur-md rounded-2xl border border-white/10 shadow-lg"><Briefcase size={32}/></div>
-                                            <div>
-                                                <h3 className="font-bold text-3xl mb-1">Special Benefits for MSPs</h3>
-                                                <p className="text-slate-400 font-medium text-base">If you are an MSP, this tool helps you protect clients and grow your business:</p>
-                                            </div>
-                                        </div>
-                                        
-                                        <div className="grid md:grid-cols-3 gap-8 mt-10">
-                                            <div className="bg-white/5 backdrop-blur-md border border-white/5 p-6 rounded-3xl hover:bg-white/10 hover:-translate-y-2 transition-all duration-300 shadow-lg">
-                                                <div className="w-12 h-12 bg-purple-500/20 rounded-xl flex items-center justify-center text-purple-300 mb-4">
-                                                    <Target size={24} />
-                                                </div>
-                                                <h4 className="font-bold text-lg mb-2">Lead Generation</h4>
-                                                <p className="text-sm text-slate-400 leading-relaxed">Use the "MISPAR" tool to find companies that have recently been breached and offer them your services.</p>
-                                            </div>
-                                            <div className="bg-white/5 backdrop-blur-md border border-white/5 p-6 rounded-3xl hover:bg-white/10 hover:-translate-y-2 transition-all duration-300 shadow-lg">
-                                                <div className="w-12 h-12 bg-blue-500/20 rounded-xl flex items-center justify-center text-blue-300 mb-4">
-                                                    <FileText size={24} />
-                                                </div>
-                                                <h4 className="font-bold text-lg mb-2">Branded Reports</h4>
-                                                <p className="text-sm text-slate-400 leading-relaxed">Generate professional, white-labeled security reports with one click to show clients exactly where they are at risk.</p>
-                                            </div>
-                                            <div className="bg-white/5 backdrop-blur-md border border-white/5 p-6 rounded-3xl hover:bg-white/10 hover:-translate-y-2 transition-all duration-300 shadow-lg">
-                                                <div className="w-12 h-12 bg-emerald-500/20 rounded-xl flex items-center justify-center text-emerald-300 mb-4">
-                                                    <LayoutDashboard size={24} />
-                                                </div>
-                                                <h4 className="font-bold text-lg mb-2">Multi-Tenant Portal</h4>
-                                                <p className="text-sm text-slate-400 leading-relaxed">Manage all your different clients from a single secure dashboard.</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        )}
-
-                        {/* ATTACK SURFACE MAPPING */}
-                        {activeTab === 'asm' && (
-                            <div className="animate-fade-in">
-                                <SectionHeader 
-                                    title="Attack Surface Mapping" 
-                                    subtitle="DeXpose Attack Surface Mapping (ASM) is a security tool designed to find and protect every part of a company’s online presence." 
-                                    icon={Globe}
-                                    colorClass="bg-blue-600"
-                                    gradient="from-cyan-400 to-blue-600"
-                                />
-                                
-                                <div className="grid lg:grid-cols-2 gap-8 my-16">
-                                    <div className="h-full bg-amber-50/50 dark:bg-amber-900/10 backdrop-blur-lg rounded-[2rem] p-8 border border-amber-100 dark:border-amber-900/20 shadow-glass dark:shadow-soft-dark relative overflow-hidden group">
-                                        <div className="absolute -right-20 -top-20 w-64 h-64 bg-amber-200 dark:bg-amber-700/20 opacity-20 rounded-full blur-[80px] group-hover:scale-150 transition-transform duration-1000"></div>
-                                        
-                                        <h3 className="font-bold text-slate-800 dark:text-white mb-8 flex items-center gap-4 text-xl relative z-10 transition-colors">
-                                            <div className="bg-white dark:bg-amber-900/30 p-3 rounded-xl text-amber-500 dark:text-amber-400 shadow-sm"><AlertTriangle size={24}/></div> 
-                                            The Problem: "Digital Blind Spots"
-                                        </h3>
-                                        <p className="text-slate-600 dark:text-slate-300 mb-8 text-base font-medium relative z-10 leading-relaxed">As companies grow, they often forget about old websites, hidden cloud folders, or unpatched servers.</p>
-                                        
-                                        <ul className="space-y-6 relative z-10">
-                                            {[
-                                                { icon: TrendingUp, title: "Expansion", desc: "Moving to the cloud or remote work creates a massive digital footprint that is hard to track." },
-                                                { icon: AlertOctagon, title: "Risks", desc: "Hackers look for these forgotten \"blind spots\"—like exposed databases or outdated software—to break in." },
-                                                { icon: MessageSquare, title: "Noise", desc: "Many security tools create too many false alarms, making it hard for teams to know what is actually dangerous." }
-                                            ].map((item, i) => (
-                                                <li key={i} className="bg-white/60 dark:bg-slate-800/40 backdrop-blur-sm p-5 rounded-2xl border border-amber-100/50 dark:border-amber-900/20 hover:bg-white/80 dark:hover:bg-slate-700 hover:shadow-sm transition-all duration-300">
-                                                    <strong className="flex items-center gap-2 text-amber-600 dark:text-amber-400 text-[11px] uppercase mb-1 font-bold tracking-wider">
-                                                        <item.icon size={16}/> {item.title}
-                                                    </strong> 
-                                                    <span className="text-slate-700 dark:text-slate-300 text-[15px] leading-relaxed font-medium block">{item.desc}</span>
-                                                </li>
-                                            ))}
-                                        </ul>
-                                    </div>
-                                    
-                                    <div className="flex flex-col gap-8">
-                                        <div className="bg-blue-50/50 dark:bg-blue-900/10 backdrop-blur-lg border border-blue-100 dark:border-blue-900/20 rounded-[2rem] p-8 relative overflow-hidden shadow-glass dark:shadow-soft-dark">
-                                            <div className="absolute top-0 right-0 w-80 h-80 bg-gradient-to-b from-blue-200 to-transparent dark:from-blue-900/30 opacity-20 rounded-full blur-[80px]"></div>
-                                            <h3 className="font-bold text-slate-800 dark:text-white mb-8 flex items-center gap-4 text-xl relative z-10 transition-colors">
-                                                <div className="bg-white dark:bg-blue-900/30 p-3 rounded-xl text-blue-500 dark:text-blue-400 shadow-sm"><Zap size={24}/></div>
-                                                The Solution: "The Hybrid Approach"
-                                            </h3>
-                                            <p className="text-slate-600 dark:text-slate-300 mb-8 text-base font-medium relative z-10">DeXpose solves this by combining the speed of technology with the accuracy of people.</p>
-                                            
-                                            <div className="space-y-6 relative z-10">
-                                                <div className="flex items-start md:items-center gap-5 p-5 bg-white/80 dark:bg-slate-800/60 rounded-2xl border border-blue-100 dark:border-blue-900/30 shadow-sm hover:shadow-md transition-shadow backdrop-blur-sm">
-                                                    <div className="p-3 bg-blue-50 dark:bg-blue-900/30 rounded-xl text-blue-600 dark:text-blue-400 shrink-0"><Monitor size={24}/></div>
-                                                    <div>
-                                                        <span className="block font-bold text-slate-800 dark:text-white text-lg mb-1">AI Engine</span> 
-                                                        <span className="text-slate-600 dark:text-slate-400 text-sm font-medium leading-relaxed">A high-speed system that scans the entire internet to find your domains, IPs, and cloud assets.</span>
-                                                    </div>
-                                                </div>
-                                                <div className="flex items-start md:items-center gap-5 p-5 bg-white/80 dark:bg-slate-800/60 rounded-2xl border border-blue-100 dark:border-blue-900/30 shadow-sm hover:shadow-md transition-shadow backdrop-blur-sm">
-                                                    <div className="p-3 bg-blue-50 dark:bg-blue-900/30 rounded-xl text-blue-600 dark:text-blue-400 shrink-0"><Users size={24}/></div>
-                                                    <div>
-                                                        <span className="block font-bold text-slate-800 dark:text-white text-lg mb-1">Human Experts</span> 
-                                                        <span className="text-slate-600 dark:text-slate-400 text-sm font-medium leading-relaxed">Real security analysts check the AI’s findings to remove false alarms and explain exactly how a risk might hurt your business.</span>
-                                                    </div>
-                                                </div>
-                                                <div className="flex items-start md:items-center gap-5 p-5 bg-white/80 dark:bg-slate-800/60 rounded-2xl border border-blue-100 dark:border-blue-900/30 shadow-sm hover:shadow-md transition-shadow backdrop-blur-sm">
-                                                    <div className="p-3 bg-blue-50 dark:bg-blue-900/30 rounded-xl text-blue-600 dark:text-blue-400 shrink-0"><Activity size={24}/></div>
-                                                    <div>
-                                                        <span className="block font-bold text-slate-800 dark:text-white text-lg mb-1">Continuous Learning</span> 
-                                                        <span className="text-slate-600 dark:text-slate-400 text-sm font-medium leading-relaxed">The system gets smarter every time it scans, adapting to new types of attacks.</span>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div>
-                                            <FeatureList 
-                                                title="Main Benefits"
-                                                color="green"
-                                                items={[
-                                                    { title: "Stay Ahead", desc: "Fix your weaknesses before a hacker can use them." },
-                                                    { title: "No More Guessing", desc: 'Get a clear list of what to fix without the "noise" of false reports.' },
-                                                    { title: "Better Reports", desc: "Clearly show your progress and security health to bosses or regulators." }
-                                                ]}
-                                            />
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div className="mt-16 mb-12">
-                                    <div className="text-center mb-10">
-                                        <h3 className="text-3xl md:text-4xl font-bold text-slate-800 dark:text-white transition-colors">Key Features to Remember</h3>
-                                    </div>
-                                    <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-                                        <InfoCard title="Full Visibility" text="It finds everything you own, even the stuff you forgot about." icon={Eye} accentColor="blue" delay={100} />
-                                        <InfoCard title="Risk Scoring" text="It doesn't just find a problem; it tells you how serious it is and what the impact would be." icon={AlertTriangle} accentColor="amber" delay={200} />
-                                        <InfoCard title="24/7 Monitoring" text='If something changes or a new "door" is left open, you get an instant alert.' icon={Clock} accentColor="green" delay={300} />
-                                        <InfoCard title="Multi-Client Ready" text="Built specifically to help service providers (MSPs) and national security teams (CERTs) manage many organizations at once." icon={Users} accentColor="purple" delay={400} />
-                                    </div>
-                                </div>
-                            </div>
-                        )}
-
-                        {/* BRAND PROTECTION */}
-                        {activeTab === 'brand' && (
-                            <div className="animate-fade-in">
-                                <SectionHeader 
-                                    title="Brand Protection" 
-                                    subtitle="DeXpose Brand Protection is a service designed to protect a company’s reputation, digital assets, and customers from fraud and impersonation. It monitors the internet 24/7 to stop threats before they cause real damage." 
-                                    icon={ShieldCheck}
-                                    colorClass="bg-red-500"
-                                    gradient="from-orange-400 to-red-500"
-                                />
-                                
-                                <div className="bg-red-50/40 dark:bg-red-900/10 backdrop-blur-lg p-8 md:p-10 rounded-[2rem] border border-red-100 dark:border-red-900/20 mb-16 relative overflow-hidden shadow-glass dark:shadow-soft-dark">
-                                    <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-red-400 via-orange-300 to-transparent"></div>
-                                    <h3 className="font-bold text-red-900 dark:text-red-400 mb-8 flex items-center gap-4 text-2xl relative z-10 transition-colors">
-                                        <div className="bg-white dark:bg-red-900/30 p-3 rounded-xl text-red-500 dark:text-red-400 shadow-sm border border-red-100 dark:border-red-900/30"><Target size={24}/></div> 
-                                        Why Brand Protection is Essential
-                                    </h3>
-                                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 relative z-10">
-                                        {[
-                                            { t: "Stop Fraud", d: "Criminals use your brand name to launch phishing attacks or spread malware." },
-                                            { t: "Keep Trust", d: "Fake websites or rogue social media profiles can make customers lose confidence in your business." },
-                                            { t: "Save Revenue", d: "Brand abuse can drive your customers to competitors or scammers." },
-                                            { t: "Legal Safety", d: "Impersonation can lead to serious legal and regulatory issues." }
-                                        ].map((item, i) => (
-                                            <div key={i} className="bg-white/80 dark:bg-slate-800/60 backdrop-blur-sm p-6 rounded-2xl shadow-card dark:shadow-none border border-red-50 dark:border-red-900/30 hover:border-red-200 dark:hover:border-red-700 hover:shadow-glow-red hover:-translate-y-1 smooth-transition h-full">
-                                                <div className="text-red-500 dark:text-red-400 font-bold mb-3 text-lg">{item.t}</div>
-                                                <div className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed font-medium">{item.d}</div>
-                                            </div>
-                                        ))}
-                                    </div>
-                                </div>
-
-                                <div className="grid md:grid-cols-2 gap-10 mb-16">
-                                    <FeatureList 
-                                        title='What We Monitor (The "Lookout" Areas)'
-                                        color="red"
-                                        items={[
-                                            { title: "Phishing Sites", desc: "Identifying fake domains that look like yours using AI similarity models." },
-                                            { title: "Social Media", desc: "Spotting fake profiles, fraudulent ads, and people impersonating your executives (VIPs)." },
-                                            { title: "Mobile Apps", desc: 'Finding "trojan" or fake apps in the Google Play Store, Apple App Store, and third-party sites.' },
-                                            { title: "Dark Web", desc: "Searching criminal forums for stolen customer data or counterfeit products." }
-                                        ]}
-                                    />
-                                    <div className="flex flex-col gap-8">
-                                        <div className="bg-blue-50/60 dark:bg-blue-900/10 backdrop-blur-lg border border-blue-100 dark:border-blue-900/20 rounded-[2rem] p-8 flex-grow flex items-center shadow-glass dark:shadow-soft-dark">
-                                            <p className="text-blue-800 dark:text-blue-300 font-medium text-lg leading-relaxed">
-                                                <Search className="inline-block mr-3 mb-1" size={24}/> 
-                                                DeXpose scans multiple channels to find anyone pretending to be you.
-                                            </p>
-                                        </div>
-                                        <FeatureList 
-                                            title='The "Takedown" Advantage'
-                                            color="blue"
-                                            items={[
-                                                { title: "Forensic Evidence", desc: "We collect all the proof needed to show a site or app is fake." },
-                                                { title: "Ready-to-Submit Packages", desc: "We generate the paperwork you need to send to hosting providers and app stores." },
-                                                { title: "Expert Collaboration", desc: "We work directly with registrars and legal teams to get the content removed fast." }
-                                            ]}
-                                        />
-                                    </div>
-                                </div>
-                                <div className="mt-10">
-                                    <FeatureList 
-                                        title="Why DeXpose Stands Out"
-                                        color="green"
-                                        items={[
-                                            { title: "AI + Human Speed", desc: "AI finds threats in hours instead of weeks, while human experts check the results to ensure they are accurate." },
-                                            { title: "Integrated Defense", desc: "Unlike other tools, this is part of a larger security ecosystem that includes dark web intelligence." },
-                                            { title: "End-to-End Service", desc: "We handle everything from discovery and alerting to the final takedown." }
-                                        ]}
-                                    />
-                                </div>
-                            </div>
-                        )}
-
-                        {/* API INTEGRATIONS */}
-                        {activeTab === 'api' && (
-                            <div className="animate-fade-in">
-                                <SectionHeader 
-                                    title="API Integrations" 
-                                    subtitle="The DeXpose API is a tool that allows businesses to plug DeXpose’s massive database of stolen data and dark web threats directly into their own software or security dashboards." 
-                                    icon={Code}
-                                    colorClass="bg-green-600"
-                                    gradient="from-emerald-400 to-green-600"
-                                />
-                                
-                                <ProblemSolution 
-                                    problemTitle='The Problem: "Data is Hard to Find and Manage"'
-                                    solutionTitle='The Solution: "One Tool, All the Data"'
-                                    problem={[
-                                        { title: "Too Many Sources", desc: "Information about stolen data is scattered across billions of records on the dark web, Telegram, and hacker forums." },
-                                        { title: "Manual Work", desc: "Most security tools don't have an API, so teams have to check dashboards manually, which is slow and hard to scale." },
-                                        { title: "Late Warnings", desc: "By the time a company manually finds a leak, the damage is often already done." }
-                                    ]}
-                                    solution={[
-                                        { title: "Unified Feed", desc: "Instead of checking different places, the API provides one single connection for breach data, dark web mentions, and malware logs." },
-                                        { title: "Real-Time Speed", desc: "Fresh intelligence is gathered and delivered daily so you can act fast." },
-                                        { title: "Easy Integration", desc: "It uses a standard technical format (RESTful API with JSON) that makes it simple for your developers to plug it into your existing tools." }
-                                    ]}
-                                />
-
-                                <div className="mt-16 mb-16">
-                                    <div className="text-center mb-10">
-                                        <h3 className="text-3xl md:text-4xl font-bold text-slate-800 dark:text-white transition-colors">Key Capabilities</h3>
-                                    </div>
-                                    <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                                        <InfoCard title="Search Anything" text="You can instantly lookup information using an email, website domain, phone number, username, or even specific keywords." icon={Search} accentColor="green" delay={100} />
-                                        <InfoCard title="Malware Detection" text="Access logs from active malware families to see if any of your devices or accounts have been infected." icon={AlertOctagon} accentColor="red" delay={200} />
-                                        <InfoCard title="Bulk Lookups" text="If you are a large company, you can scan thousands of records at once to monitor everyone in your organization." icon={Layers} accentColor="blue" delay={300} />
-                                    </div>
-                                </div>
-                                
-                                <h3 className="text-2xl md:text-3xl font-bold text-slate-800 dark:text-white mb-10 pl-6 border-l-4 border-slate-300 dark:border-slate-600 transition-colors">Who It’s For</h3>
-                                <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                                    <InfoCard title="MSPs" text='You can add "Dark Web Intelligence" as a premium service for your clients without needing to build your own database.' icon={Briefcase} accentColor="neutral" delay={400} />
-                                    <InfoCard title="Enterprises" text="Use the API to protect your employees and executives from identity theft and fraud." icon={Briefcase} accentColor="neutral" delay={500} />
-                                    <InfoCard title="Security Companies" text="Enrich your own security platforms with DeXpose’s unique data to save years of collection costs." icon={Shield} accentColor="neutral" delay={600} />
-                                </div>
-                            </div>
-                        )}
-
-                        {/* CYBERCRIME PORTAL */}
-                        {activeTab === 'investigation' && (
-                            <div className="animate-fade-in">
-                                <SectionHeader 
-                                    title="Cybercrime Investigation Portal" 
-                                    subtitle="The DeXpose Cybercrime Investigation Portal is a specialized platform that helps law enforcement, government agencies, and businesses find and identify the people behind cyberattacks. It connects different pieces of hidden data from across the internet to unmask anonymous criminals." 
-                                    icon={Siren}
-                                    colorClass="bg-violet-600"
-                                    gradient="from-violet-400 to-fuchsia-500"
-                                />
-                                
-                                <div className="mb-16">
-                                     <FeatureList 
-                                        title="Why It is Necessary"
-                                        color="violet"
-                                        items={[
-                                            { title: "Hidden Connections", desc: "Investigators often struggle because information is spread across too many different sources, making it hard to identify suspects quickly." },
-                                            { title: "Constantly Changing Threats", desc: "Cybercriminals are always changing their methods, so investigators need flexible tools that can keep up in real-time." },
-                                            { title: "High Volume of Crime", desc: "With the massive rise in cybercrime reports, there is an urgent need for tools that can analyze large amounts of data faster than a human could alone." }
-                                        ]}
-                                    />
-                                </div>
-
-                                <div className="bg-violet-50/50 dark:bg-violet-900/10 backdrop-blur-lg p-8 md:p-12 rounded-[3rem] border border-violet-100/60 dark:border-violet-900/20 mb-16 shadow-glass dark:shadow-soft-dark">
-                                    <h3 className="font-bold text-violet-900 dark:text-violet-400 mb-10 flex items-center gap-4 text-2xl transition-colors">
-                                        <div className="p-3 bg-white dark:bg-violet-900/30 rounded-xl shadow-sm text-violet-600 dark:text-violet-400"><EyeOff size={28}/></div>
-                                        Where the Data Comes From
-                                    </h3>
-                                    <p className="text-lg text-violet-800 dark:text-violet-200 mb-10 font-medium italic">DeXpose provides a "360-degree view" by pulling information from places criminals think are private:</p>
-                                    <div className="grid md:grid-cols-2 gap-6">
-                                        {[
-                                            { t: "Telegram Monitoring", d: "Access to 2B+ messages tracking criminal discussions and coordination.", i: MessageSquare },
-                                            { t: "Infostealer Logs", d: "Data from compromised devices, including visited sites, autofill data, and payment information.", i: FileText },
-                                            { t: "Breach Repositories", d: "Leaked emails, passwords, and credentials from past public data breaches.", i: Database },
-                                            { t: "OSINT (Open Source Intelligence)", d: "Publicly available information like social media profiles, phone-based profiling, and domain history.", i: Search }
-                                        ].map((item, idx) => (
-                                            <div key={idx} className="bg-white/80 dark:bg-slate-800/60 p-6 rounded-[2rem] shadow-card dark:shadow-none border border-violet-100/50 dark:border-violet-900/30 flex gap-5 hover:shadow-glow-violet hover:-translate-y-1 smooth-transition backdrop-blur-sm">
-                                                <div className="p-3 bg-violet-50 dark:bg-violet-900/30 rounded-xl text-violet-600 dark:text-violet-400 h-fit"><item.i size={24}/></div>
-                                                <div>
-                                                    <strong className="block text-slate-800 dark:text-slate-100 text-xl mb-2 font-bold">{item.t}</strong>
-                                                    <span className="text-slate-600 dark:text-slate-400 leading-relaxed font-medium text-sm">{item.d}</span>
-                                                </div>
-                                            </div>
-                                        ))}
-                                    </div>
-                                </div>
-
-                                <div className="text-center mb-10">
-                                    <h3 className="text-3xl md:text-4xl font-bold text-slate-800 dark:text-white transition-colors">Key "Superpowers" for Investigators</h3>
-                                </div>
-                                <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-16">
-                                    <InfoCard title="Identity Attribution" text='This is the "Identity Engine" that links anonymous online usernames to real-world people by combining all the data sources.' icon={Fingerprint} accentColor="violet" delay={100} />
-                                    <InfoCard title="AI-Powered Analysis" text="It reduces the time needed to analyze evidence from weeks down to just a few hours." icon={Zap} accentColor="violet" delay={200} />
-                                    <InfoCard title="Visual Relationship Mapping" text="It creates a visual map showing how different criminals, devices, and groups are connected to each other." icon={Share2} accentColor="violet" delay={300} />
-                                    <InfoCard title="Targeted Device Search" text="Investigators can search for compromised devices by specific categories or countries to find where an attack started." icon={Crosshair} accentColor="violet" delay={400} />
-                                </div>
-                                
-                                <h3 className="text-2xl md:text-3xl font-bold text-slate-800 dark:text-white mb-8 pl-6 border-l-4 border-slate-300 dark:border-slate-600 transition-colors">The DeXpose Advantage</h3>
-                                <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                                    <InfoCard title="Reliable Evidence" text="Because the intelligence is checked by human experts, it is accurate enough to be used in legal cases and by law enforcement." icon={CheckCircle} accentColor="neutral" delay={500} />
-                                    <InfoCard title="Predictive Defense" text="It doesn't just look at what happened; it uses patterns to predict and stop future attacks before they escalate." icon={TrendingUp} accentColor="neutral" delay={600} />
-                                    <InfoCard title="Hybrid Intelligence" text="It uses AI for incredible speed but keeps human analysts involved to ensure every insight is high-quality and trustworthy." icon={Zap} accentColor="neutral" delay={700} />
-                                </div>
-                            </div>
-                        )}
-
-                        {/* MSPs */}
-                        {activeTab === 'msp' && (
-                            <div className="animate-fade-in">
-                                <SectionHeader 
-                                    title="DeXpose for MSPs" 
-                                    subtitle="DeXpose for MSPs is a program designed to help Managed Service Providers grow their business by offering high-value cybersecurity services under their own brand. It provides tools for finding new customers, protecting current ones, and increasing monthly income." 
-                                    icon={Briefcase}
-                                    colorClass="bg-slate-900 dark:bg-white dark:text-slate-900"
-                                    gradient="from-slate-600 to-slate-900 dark:from-slate-200 dark:to-white"
-                                />
-                                
-                                <div className="flex flex-col lg:grid lg:grid-cols-2 gap-10 my-12 relative z-10">
-                                    <div class="h-full">
-                                        <h3 className="font-bold text-slate-800 dark:text-white text-xl mb-8 border-b border-slate-200 dark:border-slate-700 pb-4 transition-colors">Core Services for MSPs</h3>
-                                        <FeatureList 
-                                            color="neutral"
-                                            items={[
-                                                { title: "Mispar (Prospecting Tool)", desc: "Instantly scan a potential client's website to show them their stolen passwords and dark web risks. This is used to prove the value of your services in the very first meeting." },
-                                                { title: "Continuous Dark Web Monitoring", desc: "An ongoing subscription service that watches for leaked emails, employee credentials, and mentions on hacker forums and Telegram." },
-                                                { title: "Attack Surface Mapping (ASM)", desc: 'A service that constantly discovers a client\'s internet-facing assets—like websites and cloud resources—to find hidden security weaknesses or "shadow IT".' },
-                                                { title: "Brand Protection", desc: "A premium add-on that monitors for fake websites, look-alike domains, and people impersonating company executives." }
-                                            ]}
-                                        />
-                                    </div>
-                                    <div className="bg-slate-900 dark:bg-slate-800 rounded-[2.5rem] p-10 text-white relative overflow-hidden shadow-2xl dark:shadow-soft-dark transition-transform duration-500 hover:scale-[1.01] h-full">
-                                        <div className="absolute top-0 right-0 p-8 opacity-5 pointer-events-none"><TrendingUp size={180} /></div>
-                                        <div className="absolute bottom-0 left-0 w-full h-32 bg-gradient-to-t from-black/80 to-transparent"></div>
-                                        
-                                        <h3 className="font-bold text-xl mb-10 flex items-center gap-4 relative z-10">
-                                            <div className="p-3 bg-slate-800 dark:bg-slate-700 rounded-2xl"><TrendingUp size={28} /></div> 
-                                            How MSPs Make Money (The Revenue Flow)
-                                        </h3>
-                                        <div className="space-y-10 relative z-10">
-                                            {[
-                                                { step: "Attract", desc: 'Use a free or low-cost "Mispar" scan to find new leads.' },
-                                                { step: "Convert", desc: "Sell a detailed, one-time branded report based on that scan." },
-                                                { step: "Retain", desc: "Move the client to a monthly subscription for continuous monitoring." },
-                                                { step: "Upsell", desc: "Add more advanced services like ASM (which can be billed at $35–$80 per asset yearly) or Brand Protection." }
-                                            ].map((item, i) => (
-                                                <div key={i} className="flex gap-6 group">
-                                                    <div className="w-12 h-12 rounded-full border-2 border-slate-700 dark:border-slate-600 flex items-center justify-center text-base font-bold shrink-0 group-hover:border-white group-hover:bg-white group-hover:text-black transition-all duration-300 shadow-glow">{i+1}</div>
-                                                    <div>
-                                                        <strong className="block text-white mb-1.5 text-lg group-hover:text-blue-300 transition-colors">{item.step}</strong>
-                                                        <p className="text-sm text-slate-400 leading-relaxed group-hover:text-slate-200 transition-colors">{item.desc}</p>
-                                                    </div>
-                                                </div>
-                                            ))}
-                                        </div>
-                                    </div>
-                                </div>
-                                
-                                <div className="mt-16 mb-12 relative z-20">
-                                    <div className="text-center mb-10">
-                                        <h3 className="text-3xl md:text-4xl font-bold text-slate-800 dark:text-white transition-colors">Why It Works for Your Business</h3>
-                                    </div>
-                                    <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-                                        <InfoCard title="White-Label Ready" text="All reports and services can be branded with your MSP’s logo, so it looks like your own in-house technology." icon={FileText} accentColor="neutral" delay={100} />
-                                         <InfoCard title="Low Effort" text="You don't need to hire your own research team; DeXpose does all the heavy lifting and data collection for you." icon={Zap} accentColor="neutral" delay={200} />
-                                          <InfoCard title="Easy to Scale" text="Using the API, you can automate alerts and reporting for hundreds of clients at once without needing extra staff." icon={TrendingUp} accentColor="neutral" delay={300} />
-                                           <InfoCard title="Competitive Edge" text='Offering unique data from the "underground" parts of the internet helps you stand out from generic IT providers.' icon={Swords} accentColor="neutral" delay={400} />
-                                    </div>
-                                </div>
-                            </div>
-                        )}
-
-                        {/* COMPETITORS */}
-                        {activeTab === 'competitors' && (
-                            <div className="animate-fade-in">
-                                <SectionHeader 
-                                    title="Competitors" 
-                                    subtitle="DEXPOSE: THE SURGICAL RADAR (BATTLE CARD). DeXpose is designed to be a surgical radar, not a complex platform. While competitors often focus on massive data collection and complex dashboards, DeXpose focuses on providing immediate, actionable signals that tell you exactly what an attacker could exploit right now." 
-                                    icon={Swords}
-                                    colorClass="bg-red-600"
-                                    gradient="from-red-500 to-red-900"
-                                />
-                                
-                                <div className="bg-slate-900 dark:bg-slate-800 text-white p-10 md:p-14 rounded-[3rem] mb-16 shadow-2xl relative overflow-hidden group">
-                                    <div className="absolute top-0 right-0 p-8 opacity-10 rotate-12 transition-transform duration-1000 group-hover:rotate-45"><Crosshair size={320} /></div>
-                                    <h3 className="text-3xl font-bold mb-10 relative z-10 flex items-center gap-5">
-                                        <div className="h-12 w-2 bg-red-600 rounded-full"></div>
-                                        THE CORE PHILOSOPHY
-                                    </h3>
-                                    <div className="grid md:grid-cols-2 gap-10 relative z-10">
-                                        <div className="bg-white/5 p-8 rounded-[2.5rem] border border-white/10 backdrop-blur-md hover:bg-white/10 transition-colors duration-500">
-                                            <strong className="flex items-center gap-3 text-red-400 mb-4 uppercase tracking-wider text-sm font-bold">
-                                                <Layers size={16}/> Competitors (The "Platforms")
-                                            </strong>
-                                            <p className="text-slate-300 leading-relaxed font-medium text-lg">Most competitors are massive platforms with many modules that require training, tuning, and dedicated analysts to manage the high volume of data (noise).</p>
-                                        </div>
-                                        <div className="bg-blue-600/20 p-8 rounded-[2.5rem] border border-blue-500/30 backdrop-blur-md hover:bg-blue-600/30 transition-colors duration-500 shadow-glow-blue">
-                                            <strong className="flex items-center gap-3 text-blue-400 mb-4 uppercase tracking-wider text-sm font-bold">
-                                                <Radar size={16}/> DeXpose (The "Radar")
-                                            </strong>
-                                            <p className="text-white leading-relaxed font-medium text-lg">DeXpose is lightweight and simple. It removes "dashboard fatigue" by sending only the signals that require immediate action, making it perfect for lean teams without a dedicated security operations center (SOC).</p>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div className="mb-16">
-                                    <h3 className="font-bold text-slate-800 dark:text-white text-2xl mb-10 pb-4 border-b border-slate-200 dark:border-slate-700 transition-colors">DEXPOSE VS. SPECIFIC COMPETITORS</h3>
-                                    <div className="grid gap-8 sm:grid-cols-2">
-                                        <CompetitorCard 
-                                            competitor="SPYCLOUD"
-                                            strength="Specialized in identity and stolen credentials."
-                                            whyDeXpose="DeXpose sees the entire attack surface, not just credentials."
-                                        />
-                                        <CompetitorCard 
-                                            competitor="SOCRADAR"
-                                            strength="A massive, multi-module platform for enterprise SOCs."
-                                            whyDeXpose="DeXpose is faster, cheaper, and surgical with zero training needed."
-                                        />
-                                        <CompetitorCard 
-                                            competitor="FLARE"
-                                            strength="Modular threat-intel with many dashboards for analysts."
-                                            whyDeXpose="DeXpose is IT-leader friendly and focuses on rapid decision-making."
-                                        />
-                                        <CompetitorCard 
-                                            competitor="DIGITAL SHADOWS"
-                                            strength="High-end reputation and global risk protection."
-                                            whyDeXpose="DeXpose has zero platform overhead and is built for fast action."
-                                        />
-                                        <CompetitorCard 
-                                            competitor="ZEROFOX"
-                                            strength="Massive scale brand and fraud protection."
-                                            whyDeXpose="DeXpose is lightweight and focuses only on what attackers use to get in."
-                                        />
-                                         <CompetitorCard 
-                                            competitor="CYBLE"
-                                            strength='Broad "everything" view of dark web and cybercrime.'
-                                            whyDeXpose="DeXpose filters out the noise to tell you what actually matters today."
-                                        />
-                                    </div>
-                                </div>
-
-                                <div className="bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 p-10 rounded-[3rem] border border-blue-100 dark:border-blue-900/30 shadow-inner">
-                                    <h3 className="font-bold text-blue-900 dark:text-blue-200 mb-10 flex items-center gap-4 text-2xl">
-                                        <div className="bg-white dark:bg-blue-900/40 p-3 rounded-2xl text-blue-600 dark:text-blue-300 shadow-sm"><LayoutDashboard size={28}/></div>
-                                        SIMPLE "HANDLING LINES"
-                                    </h3>
-                                    <div className="grid md:grid-cols-2 gap-8 text-sm">
-                                        {[
-                                            { t: "The Identity Difference", d: '"SpyCloud protects user identities; DeXpose protects your entire attack surface."' },
-                                            { t: "The Platform Difference", d: '"SOCRadar maps the universe; DeXpose maps your attack surface."' },
-                                            { t: "The Clarity Difference", d: '"Flare gives visibility; DeXpose gives direction."' },
-                                            { t: "The Speed Difference", d: '"ZeroFox protects your brand at scale; DeXpose protects your exposure at speed."' },
-                                            { t: "The Focus Difference", d: '"Cyble tells you everything that could matter; DeXpose tells you what actually matters today."' }
-                                        ].map((item, i) => (
-                                            <div key={i} className="bg-white/80 dark:bg-slate-800/60 p-6 rounded-[2rem] border border-blue-100/50 dark:border-blue-900/30 shadow-card hover:border-blue-300 dark:hover:border-blue-700 hover:shadow-lg transition-all duration-300 hover:-translate-y-1 backdrop-blur-sm">
+                                            <div key={i} className="bg-white dark:bg-slate-800/60 p-6 rounded-[2rem] border border-blue-100/50 dark:border-blue-900/30 shadow-card hover:border-blue-300 dark:hover:border-blue-700 hover:shadow-lg transition-all duration-300 hover:-translate-y-1 backdrop-blur-sm">
                                                 <strong className="block text-blue-600 dark:text-blue-400 mb-2 font-bold uppercase text-xs tracking-wider border-b border-blue-50 dark:border-blue-900/50 pb-2">{item.t}</strong>
                                                 <span className="text-slate-600 dark:text-slate-400 italic font-medium leading-relaxed block text-lg">{item.d}</span>
                                             </div>
