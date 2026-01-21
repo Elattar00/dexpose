@@ -44,15 +44,15 @@
                         },
                     },
                     animation: {
-                        'fade-in': 'fadeIn 0.8s ease-out forwards',
-                        'slide-up': 'slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards',
+                        'fade-in': 'fadeIn 0.3s ease-out forwards', // Sped up from 0.8s
+                        'slide-up': 'slideUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards',
                         'float': 'float 6s ease-in-out infinite',
                         'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
                     },
                     keyframes: {
                         fadeIn: {
-                            '0%': { opacity: '0', filter: 'blur(10px)' },
-                            '100%': { opacity: '1', filter: 'blur(0)' },
+                            '0%': { opacity: '0', transform: 'translateY(-5px)' }, // Removed blur filter, added subtle slide
+                            '100%': { opacity: '1', transform: 'translateY(0)' },
                         },
                         slideUp: {
                             '0%': { transform: 'translateY(20px)', opacity: '0' },
@@ -121,7 +121,7 @@
             background-color: #f8fafc;
             color: #334155;
             -webkit-font-smoothing: antialiased;
-            transition: background-color 0.5s ease, color 0.5s ease;
+            transition: background-color 0.3s ease, color 0.3s ease; /* Faster base transition */
         }
 
         /* Ambient Mesh Background */
@@ -132,7 +132,7 @@
             width: 100vw;
             height: 100vh;
             z-index: -1;
-            background-size: 50px 50px; /* Larger grid for cleaner look */
+            background-size: 50px 50px;
             background-position: center top;
             transition: all 0.5s ease;
         }
@@ -143,11 +143,10 @@
             background-image: 
                 linear-gradient(rgba(203, 213, 225, 0.15) 1px, transparent 1px),
                 linear-gradient(to right, rgba(203, 213, 225, 0.15) 1px, transparent 1px);
-            /* Subtle vignette */
             box-shadow: inset 0 0 200px 100px rgba(255,255,255,0.9);
         }
 
-        /* Dark Mode Ambient - Ultra subtle */
+        /* Dark Mode Ambient */
         .dark-ambient {
             background-color: #000000;
             background-image: 
@@ -162,7 +161,7 @@
             backdrop-filter: blur(20px) saturate(180%);
             -webkit-backdrop-filter: blur(20px) saturate(180%);
             border-bottom: 1px solid rgba(255, 255, 255, 0.6);
-            transition: background 0.5s ease, border-color 0.5s ease;
+            transition: background 0.3s ease, border-color 0.3s ease; /* Faster transition */
         }
 
         .dark .glass-header {
@@ -205,7 +204,7 @@
             CheckCircle, Zap, TrendingUp, UserCheck, Database, FileText,
             LayoutDashboard, EyeOff, Crosshair, Fingerprint,
             ShieldCheck, Share2, Layers, AlertOctagon, Monitor,
-            Clock, MessageSquare, Users, Activity, Radar, Moon, Sun
+            Clock, MessageSquare, Users, Activity, Radar, Moon, Sun, ChevronDown
         } from 'lucide-react';
 
         // --- UI Components ---
@@ -216,7 +215,6 @@
                 
                 <div className="flex flex-col md:flex-row items-start md:items-center gap-6 relative z-10">
                     <div className={`p-5 rounded-3xl ${colorClass} shadow-xl shadow-current/20 transform transition-transform group-hover:scale-105 group-hover:-rotate-3 duration-500`}>
-                        {/* Changed text-white to text-inherit to allow parent to control color when needed */}
                         <Icon size={36} className="text-inherit drop-shadow-sm" />
                     </div>
                     <div>
@@ -404,6 +402,7 @@
         const App = () => {
             const [activeTab, setActiveTab] = useState('darkweb');
             const [darkMode, setDarkMode] = useState(true);
+            const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
             const toggleDarkMode = () => {
                 setDarkMode(!darkMode);
@@ -418,6 +417,8 @@
                 { id: 'msp', label: 'For MSPs', icon: Briefcase },
                 { id: 'competitors', label: 'Battle Card', icon: Swords },
             ];
+            
+            const activeTabObj = navItems.find(item => item.id === activeTab) || navItems[0];
 
             return (
                 <div className={`${darkMode ? 'dark' : ''} font-sans selection:bg-blue-200 selection:text-blue-900 min-h-screen transition-colors duration-500`}>
@@ -450,8 +451,49 @@
                                     </button>
                                 </div>
 
-                                {/* Tabs */}
-                                <div className="flex overflow-x-auto gap-3 pb-2 -mx-6 px-6 md:mx-0 md:px-0 no-scrollbar pt-1 scroll-smooth">
+                                {/* Mobile Optimized Dropdown Navigation */}
+                                <div className="md:hidden relative z-50">
+                                    <button 
+                                        onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                                        className="w-full relative px-5 py-4 rounded-2xl text-sm font-bold uppercase tracking-wide transition-all duration-300 flex items-center justify-between gap-2.5 border backdrop-blur-md bg-white/60 dark:bg-slate-800/60 text-slate-800 dark:text-white border-slate-200 dark:border-slate-700 shadow-md"
+                                    >
+                                        <span className="flex items-center gap-3">
+                                            <activeTabObj.icon size={18} className="text-blue-600 dark:text-blue-400" />
+                                            {activeTabObj.label}
+                                        </span>
+                                        <ChevronDown size={18} className={`transition-transform duration-300 ${isMobileMenuOpen ? 'rotate-180' : ''}`} />
+                                    </button>
+                                    
+                                    {isMobileMenuOpen && (
+                                        <>
+                                            <div className="fixed inset-0 z-40" onClick={() => setIsMobileMenuOpen(false)}></div>
+                                            <div className="absolute top-full left-0 w-full mt-2 bg-white/95 dark:bg-slate-900/95 backdrop-blur-xl border border-slate-200 dark:border-slate-700 rounded-2xl shadow-2xl z-50 overflow-hidden py-2 animate-fade-in origin-top">
+                                                {navItems.map((tab) => (
+                                                    <button
+                                                        key={tab.id}
+                                                        onClick={() => {
+                                                            setActiveTab(tab.id);
+                                                            setIsMobileMenuOpen(false);
+                                                        }}
+                                                        className={`
+                                                            w-full px-5 py-3 text-left text-xs font-bold uppercase tracking-wide transition-all duration-200 flex items-center gap-3
+                                                            ${activeTab === tab.id 
+                                                                ? 'bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 border-l-4 border-blue-500' 
+                                                                : 'text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 border-l-4 border-transparent'
+                                                            }
+                                                        `}
+                                                    >
+                                                        <tab.icon size={16} />
+                                                        {tab.label}
+                                                    </button>
+                                                ))}
+                                            </div>
+                                        </>
+                                    )}
+                                </div>
+
+                                {/* Desktop Tabs - Preserved EXACTLY as requested, wrapped in hidden md:flex */}
+                                <div className="hidden md:flex overflow-x-auto gap-3 pb-2 -mx-6 px-6 md:mx-0 md:px-0 no-scrollbar pt-1 scroll-smooth">
                                     {navItems.map((tab) => (
                                         <button
                                             key={tab.id}
