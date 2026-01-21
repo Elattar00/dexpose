@@ -216,7 +216,8 @@
                 
                 <div className="flex flex-col md:flex-row items-start md:items-center gap-6 relative z-10">
                     <div className={`p-5 rounded-3xl ${colorClass} shadow-xl shadow-current/20 transform transition-transform group-hover:scale-105 group-hover:-rotate-3 duration-500`}>
-                        <Icon size={36} className="text-white drop-shadow-sm" />
+                        {/* Changed text-white to text-inherit to allow parent to control color when needed */}
+                        <Icon size={36} className="text-inherit drop-shadow-sm" />
                     </div>
                     <div>
                         <h2 className="text-3xl md:text-4xl font-extrabold tracking-tight text-slate-800 dark:text-slate-100 mb-2 transition-colors duration-300">{title}</h2>
@@ -269,7 +270,7 @@
             
             return (
                 <div 
-                    className={`group relative flex flex-col h-full bg-white/60 dark:bg-slate-900/40 backdrop-blur-md rounded-[2rem] p-8 smooth-transition hover:-translate-y-2 border border-white/40 dark:border-white/5 ${theme.container} ${theme.shadow} shadow-glass dark:shadow-none overflow-hidden card-highlight`}
+                    className={`group relative flex flex-col h-full bg-white/60 dark:bg-slate-900/40 backdrop-blur-md rounded-[2rem] p-8 smooth-transition hover:-translate-y-2 border border-white/40 dark:border-white/5 ${theme.container} ${theme.shadow} shadow-glass dark:shadow-none overflow-hidden card-highlight animate-slide-up opacity-0`}
                     style={{ animationDelay: `${delay}ms` }}
                 >
                     <div className="relative z-10 flex flex-col h-full">
@@ -307,7 +308,7 @@
                     )}
                     <ul className="space-y-5">
                         {items.map((item, i) => (
-                            <li key={i} className="flex gap-5 group/item animate-slide-up hover:bg-slate-50/50 dark:hover:bg-slate-800/30 p-2.5 -mx-2.5 rounded-2xl transition-colors" style={{ animationDelay: `${i * 100}ms` }}>
+                            <li key={i} className="flex gap-5 group/item animate-slide-up opacity-0 hover:bg-slate-50/50 dark:hover:bg-slate-800/30 p-2.5 -mx-2.5 rounded-2xl transition-colors" style={{ animationDelay: `${i * 100}ms` }}>
                                 <div className={`flex-shrink-0 w-8 h-8 rounded-xl flex items-center justify-center text-[10px] font-bold text-white bg-gradient-to-br ${theme.gradient} shadow-md ${theme.shadow} group-hover/item:scale-110 smooth-transition`}>
                                     {i + 1}
                                 </div>
@@ -459,7 +460,7 @@
                                                 relative px-5 py-3 rounded-2xl text-xs font-bold uppercase tracking-wide transition-all duration-300 whitespace-nowrap flex items-center gap-2.5 border backdrop-blur-sm
                                                 ${activeTab === tab.id 
                                                     ? 'bg-slate-900 dark:bg-slate-800 text-white dark:text-blue-300 border-slate-900 dark:border-slate-700 shadow-md shadow-slate-200 dark:shadow-slate-900/50 transform scale-[1.02]' 
-                                                    : 'bg-white/40 dark:bg-slate-800/20 text-slate-500 dark:text-slate-400 border-slate-200 dark:border-transparent hover:bg-white/80 dark:hover:bg-slate-700/80 hover:text-slate-900 dark:hover:text-white hover:shadow-sm'
+                                                    : 'bg-white/40 dark:bg-slate-800/40 text-slate-500 dark:text-slate-400 border-slate-200 dark:border-transparent hover:bg-white/80 dark:hover:bg-slate-700/80 hover:text-slate-900 dark:hover:text-white hover:shadow-sm'
                                                 }
                                             `}
                                         >
@@ -481,7 +482,7 @@
                                     title="Dark Web Monitoring" 
                                     subtitle="DeXpose Dark Web Monitoring is a 'radar' for the hidden parts of the internet, designed to find stolen data before hackers can use it. It is available as a general security tool and a specialized version for Managed Service Providers (MSPs)." 
                                     icon={Radar}
-                                    colorClass="bg-slate-900 dark:bg-blue-600"
+                                    colorClass="bg-slate-900 dark:bg-blue-600 text-white"
                                     gradient="from-slate-400 to-slate-900 dark:from-slate-700 dark:to-slate-950"
                                 />
                                 
@@ -564,7 +565,7 @@
                                     title="Attack Surface Mapping" 
                                     subtitle="DeXpose Attack Surface Mapping (ASM) is a security tool designed to find and protect every part of a company’s online presence." 
                                     icon={Globe}
-                                    colorClass="bg-blue-600"
+                                    colorClass="bg-blue-600 text-white"
                                     gradient="from-cyan-400 to-blue-600"
                                 />
                                 
@@ -662,7 +663,7 @@
                                     title="Brand Protection" 
                                     subtitle="DeXpose Brand Protection is a service designed to protect a company’s reputation, digital assets, and customers from fraud and impersonation. It monitors the internet 24/7 to stop threats before they cause real damage." 
                                     icon={ShieldCheck}
-                                    colorClass="bg-red-500"
+                                    colorClass="bg-red-500 text-white"
                                     gradient="from-orange-400 to-red-500"
                                 />
                                 
@@ -737,7 +738,7 @@
                                     title="API Integrations" 
                                     subtitle="The DeXpose API is a tool that allows businesses to plug DeXpose’s massive database of stolen data and dark web threats directly into their own software or security dashboards." 
                                     icon={Code}
-                                    colorClass="bg-green-600"
+                                    colorClass="bg-green-600 text-white"
                                     gradient="from-emerald-400 to-green-600"
                                 />
                                 
@@ -783,7 +784,7 @@
                                     title="Cybercrime Investigation Portal" 
                                     subtitle="The DeXpose Cybercrime Investigation Portal is a specialized platform that helps law enforcement, government agencies, and businesses find and identify the people behind cyberattacks. It connects different pieces of hidden data from across the internet to unmask anonymous criminals." 
                                     icon={Siren}
-                                    colorClass="bg-violet-600"
+                                    colorClass="bg-violet-600 text-white"
                                     gradient="from-violet-400 to-fuchsia-500"
                                 />
                                 
@@ -849,7 +850,7 @@
                                     title="DeXpose for MSPs" 
                                     subtitle="DeXpose for MSPs is a program designed to help Managed Service Providers grow their business by offering high-value cybersecurity services under their own brand. It provides tools for finding new customers, protecting current ones, and increasing monthly income." 
                                     icon={Briefcase}
-                                    colorClass="bg-slate-900 dark:bg-white dark:text-slate-900"
+                                    colorClass="bg-slate-900 text-white dark:bg-white dark:text-slate-900"
                                     gradient="from-slate-600 to-slate-900 dark:from-slate-200 dark:to-white"
                                 />
                                 
@@ -914,7 +915,7 @@
                                     title="Competitors" 
                                     subtitle="DEXPOSE: THE SURGICAL RADAR (BATTLE CARD). DeXpose is designed to be a surgical radar, not a complex platform. While competitors often focus on massive data collection and complex dashboards, DeXpose focuses on providing immediate, actionable signals that tell you exactly what an attacker could exploit right now." 
                                     icon={Swords}
-                                    colorClass="bg-red-600"
+                                    colorClass="bg-red-600 text-white"
                                     gradient="from-red-500 to-red-900"
                                 />
                                 
@@ -979,7 +980,7 @@
                                 <div className="bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 p-10 rounded-[3rem] border border-blue-100 dark:border-blue-900/30 shadow-inner">
                                     <h3 className="font-bold text-blue-900 dark:text-blue-200 mb-10 flex items-center gap-4 text-2xl">
                                         <div className="bg-white dark:bg-blue-900/40 p-3 rounded-2xl text-blue-600 dark:text-blue-300 shadow-sm"><LayoutDashboard size={28}/></div>
-                                        SIMPLE "HANDLING LINES" (Easy to Memorize)
+                                        SIMPLE "HANDLING LINES"
                                     </h3>
                                     <div className="grid md:grid-cols-2 gap-8 text-sm">
                                         {[
